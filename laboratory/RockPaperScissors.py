@@ -24,10 +24,7 @@ def main():
             if yourChoice == 0: break
             computersChoice = ranr(1,4)
 
-            print()
-            print("당신의 선택은 " + toGBB(yourChoice) + " 입니다.")
-            print("컴퓨터의 선택은 " + toGBB(computersChoice) + " 입니다.")
-            print()
+            print("\n당신 " + toGBB(yourChoice) + " : " + toGBB(computersChoice) + " 컴퓨터\n")
 
             if yourChoice == computersChoice:
                 print("비겼습니다!")
