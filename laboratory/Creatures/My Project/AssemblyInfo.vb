@@ -10,9 +10,9 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("Creatures")>
 <Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("Bluehill Media Inc.")>
+<Assembly: AssemblyCompany("na")>
 <Assembly: AssemblyProduct("Creatures")>
-<Assembly: AssemblyCopyright("Copyright © Bluehill Media Inc. 2022")>
+<Assembly: AssemblyCopyright("Copyright © na 2022")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>

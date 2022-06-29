@@ -1,36 +1,58 @@
-﻿Public Class MainClass
-    Public Shared Sub Main()
+﻿Imports System.Console
+
+Module Main
+    Public Sub Main()
         Try
-            Dim stb1 As New Strawberry("딸기1")
-            Dim swp1 As New SweetPepper("피망1")
+            Dim instance = Container.Instance
 
-            Dim minsoo As New Human("민수", Gender.Male)
+            With instance
+                .AddHuman(New Human("민수", Gender.Male))
+                .AddHuman(New Human("짱구", Gender.Male, New SweetPepper))
 
-            With minsoo
-                .SpeakName()
-                .Eat(stb1)
-                .Eat(swp1)
-                .Sleep()
+                .AddFood(New Strawberry)
+                .AddFood(New SweetPepper)
             End With
 
-            Console.WriteLine()
+            Dim minsoo = instance.GetHuman(0)
+            Dim zzanggu = instance.GetHuman(1)
 
-            Dim stb2 As New Strawberry("딸기2")
-            Dim swp2 As New SweetPepper("피망2")
+            minsoo.SpeakName()
+            zzanggu.SpeakName()
 
-            Dim zzanggu As New Human("짱구", Gender.Male, swp1)
-
-            With zzanggu
-                .SpeakName()
-                .Eat(stb2)
-                .Eat(swp2)
-                .Sleep()
-            End With
-
-        Catch ex As Exception
-            Console.WriteLine(ex.Message)
+            minsoo.Eat(instance.GetFood(0))
+            zzanggu.Eat(instance.GetFood(1))
+        Catch ex As Exception : WriteLine(ex.Message)
         End Try
     End Sub
+End Module
+
+Public NotInheritable Class Container
+    Private humans As Human()
+    Private hi As Integer = 0
+    Private foods As IFood()
+    Private fi As Integer = 0
+
+    Public Shared ReadOnly Property Instance As New Container
+
+    Public Sub AddHuman(human As Human)
+        ReDim Preserve humans(hi)
+        humans.SetValue(human, hi)
+        hi += 1
+    End Sub
+
+    Public Function GetHuman(index As Integer) As Human
+        Return humans(index)
+    End Function
+
+    Public Sub AddFood(food As IFood)
+        ReDim Preserve foods(fi)
+        foods.SetValue(food, fi)
+        fi += 1
+    End Sub
+
+    Public Function GetFood(index As Integer) As IFood
+        Return foods(index)
+    End Function
 End Class
 
 Public MustInherit Class Creature : Implements INameable
@@ -39,18 +61,6 @@ Public MustInherit Class Creature : Implements INameable
     Public Sub New(argname As String, arggender As Gender)
         Name = If(argname, "(이름 없음)")
         _gender = arggender
-    End Sub
-
-    Public Sub New(name As String)
-        Me.New(name, Gender.None)
-    End Sub
-
-    Public Sub New(gender As Gender)
-        Me.New(Nothing, gender)
-    End Sub
-
-    Public Sub New()
-        Me.New(Nothing, Gender.None)
     End Sub
 
     Public ReadOnly Property Name As String Implements INameable.Name
@@ -78,18 +88,6 @@ Public MustInherit Class Plant : Inherits Creature
     Public Sub New(name As String, gender As Gender)
         MyBase.New(name, gender)
     End Sub
-
-    Public Sub New(name As String)
-        Me.New(name, Gender.None)
-    End Sub
-
-    Public Sub New(gender As Gender)
-        Me.New(Nothing, gender)
-    End Sub
-
-    Public Sub New()
-        Me.New(Nothing, Gender.None)
-    End Sub
 End Class
 
 Public MustInherit Class PlantFood : Inherits Plant : Implements IFood
@@ -98,18 +96,6 @@ Public MustInherit Class PlantFood : Inherits Plant : Implements IFood
     Public Sub New(name As String, gender As Gender)
         MyBase.New(name, gender)
         _IsEaten = False
-    End Sub
-
-    Public Sub New(name As String)
-        Me.New(name, Gender.None)
-    End Sub
-
-    Public Sub New(gender As Gender)
-        Me.New(Nothing, gender)
-    End Sub
-
-    Public Sub New()
-        Me.New(Nothing, Gender.None)
     End Sub
 
     Public MustOverride ReadOnly Property FoodName As String Implements IFood.FoodName
@@ -121,13 +107,11 @@ Public MustInherit Class PlantFood : Inherits Plant : Implements IFood
         End Get
     End Property
 
-    Public Function Eat() As Integer Implements IFood.Eat
+    Public Sub Eat() Implements IFood.Eat
         If IsEaten Then Throw New AlreadyEatenException(Me)
 
         _IsEaten = True
-
-        Return 0
-    End Function
+    End Sub
 
     Private Class AlreadyEatenException : Inherits Exception
         Public Sub New(food As IFood)
@@ -144,35 +128,11 @@ Public MustInherit Class Vegetable : Inherits PlantFood
     Public Sub New(name As String, gender As Gender)
         MyBase.New(name, gender)
     End Sub
-
-    Public Sub New(name As String)
-        Me.New(name, Gender.None)
-    End Sub
-
-    Public Sub New(gender As Gender)
-        Me.New(Nothing, gender)
-    End Sub
-
-    Public Sub New()
-        Me.New(Nothing, Gender.None)
-    End Sub
 End Class
 
 Public MustInherit Class Fruit : Inherits PlantFood
     Public Sub New(name As String, gender As Gender)
         MyBase.New(name, gender)
-    End Sub
-
-    Public Sub New(name As String)
-        Me.New(name, Gender.None)
-    End Sub
-
-    Public Sub New(gender As Gender)
-        Me.New(Nothing, gender)
-    End Sub
-
-    Public Sub New()
-        Me.New(Nothing, Gender.None)
     End Sub
 End Class
 
@@ -223,20 +183,8 @@ Public MustInherit Class Animal : Inherits Creature : Implements ISleep, IEat
         MyBase.New(name, gender)
     End Sub
 
-    Public Sub New(name As String)
-        Me.New(name, Gender.None)
-    End Sub
-
-    Public Sub New(gender As Gender)
-        Me.New(Nothing, gender)
-    End Sub
-
-    Public Sub New()
-        Me.New(Nothing, Gender.None)
-    End Sub
-
-    Public MustOverride Function Sleep() As Integer Implements ISleep.Sleep
-    Public MustOverride Function Eat(food As IFood) As Integer Implements IEat.Eat
+    Public MustOverride Sub Sleep() Implements ISleep.Sleep
+    Public MustOverride Sub Eat(food As IFood) Implements IEat.Eat
 End Class
 
 Public Class Human : Inherits Animal : Implements ISpeak
@@ -253,7 +201,7 @@ Public Class Human : Inherits Animal : Implements ISpeak
         For Each hatefood In hatefoods
             ReDim Preserve temp(i)
             temp.SetValue(hatefood.FoodName, i)
-            i += 1
+            i += 1US
         Next
 
         Hates = temp
@@ -262,24 +210,20 @@ Public Class Human : Inherits Animal : Implements ISpeak
     Public ReadOnly Property Hates As String()
 
     Public Sub SpeakName() Implements ISpeak.SpeakName
-        Console.WriteLine("내 이름은 " & Name)
+        WriteLine("내 이름은 " & Name)
     End Sub
 
-    Public Overrides Function Sleep() As Integer
-        Console.WriteLine("zzz...")
+    Public Overrides Sub Sleep()
+        WriteLine("zzz...")
+    End Sub
 
-        Return 0
-    End Function
-
-    Public Overrides Function Eat(food As IFood) As Integer
+    Public Overrides Sub Eat(food As IFood)
         If Hates IsNot Nothing AndAlso Hates.Contains(food.FoodName) Then Throw New HateFoodException(food.FoodName)
 
         food.Eat()
 
-        Console.WriteLine(food.FoodName & " 아이 맛있어")
-
-        Return 0
-    End Function
+        WriteLine(food.FoodName & " 아이 맛있어")
+    End Sub
 
     Private Class HateFoodException : Inherits Exception
         Public Sub New(food As String)
@@ -314,15 +258,15 @@ Public Interface IFood : Inherits INameable
     ReadOnly Property FoodName As String
     ReadOnly Property FoodTaste As Flavor
     ReadOnly Property IsEaten As Boolean
-    Function Eat() As Integer
+    Sub Eat()
 End Interface
 
 Public Interface IEat
-    Function Eat(food As IFood) As Integer
+    Sub Eat(food As IFood)
 End Interface
 
 Public Interface ISleep
-    Function Sleep() As Integer
+    Sub Sleep()
 End Interface
 
 Public Interface ISpeak
