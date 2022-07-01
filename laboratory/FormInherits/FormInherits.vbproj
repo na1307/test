@@ -73,17 +73,13 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActForm1.vb">
+    <Compile Include="FormNormal.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ActForm2.vb">
+    <Compile Include="FormAbstract.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BaseForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BaseForm.Designer.vb">
-      <DependentUpon>BaseForm.vb</DependentUpon>
+    <Compile Include="FormSingle.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -104,14 +100,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ActForm1.resx">
-      <DependentUpon>ActForm1.vb</DependentUpon>
+    <EmbeddedResource Include="FormNormal.resx">
+      <DependentUpon>FormNormal.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ActForm2.resx">
-      <DependentUpon>ActForm2.vb</DependentUpon>
+    <EmbeddedResource Include="FormAbstract.resx">
+      <DependentUpon>FormAbstract.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BaseForm.resx">
-      <DependentUpon>BaseForm.vb</DependentUpon>
+    <EmbeddedResource Include="FormSingle.resx">
+      <DependentUpon>FormSingle.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
