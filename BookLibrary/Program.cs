@@ -1,34 +1,43 @@
-﻿global using BookLibrary;
-global using System;
+﻿global using System;
+using BookLibrary;
 using static System.Console;
 
 int bookIndex = 1;
-int userIndex = 0;
 
 while (true) {
     WriteLine();
 
     WriteLine("1. 책 추가");
     WriteLine("2. 책 목록");
+    WriteLine("3. 책 제거");
 
     WriteLine("\r\n0. 끝내기");
 
     Write("\r\n선택 : ");
 
-    switch (int.Parse(ReadLine())) {
-        case 0:
-            return;
+    try {
+        switch (int.Parse(ReadLine())) {
+            case 0:
+                return;
 
-        case 1:
-            AddBook();
-            break;
+            case 1:
+                AddBook();
+                break;
 
-        case 2:
-            BookList();
-            break;
+            case 2:
+                BookList();
+                break;
 
-        default:
-            continue;
+            case 3:
+                RemoveBook();
+                break;
+
+            default:
+                OutOfLange();
+                continue;
+        }
+    } catch (FormatException) {
+        OutOfLange();
     }
 }
 
@@ -53,7 +62,7 @@ void AddBook() {
 }
 
 void BookList() {
-    foreach (var book in Container.Instance.GetBooks()) {
+    foreach (var book in Container.Instance.GetAllBooks()) {
         WriteLine();
 
         WriteLine("책 번호 : " + book.ID);
@@ -63,3 +72,15 @@ void BookList() {
         WriteLine("책 설명 : " + book.Description);
     }
 }
+
+void RemoveBook() {
+    Write("\r\n제거할 책의 번호를 입력 : ");
+
+    try {
+        Container.Instance.RemoveBook(int.Parse(ReadLine()) - 1);
+    } catch (FormatException) {
+        WriteLine("숫자만 입력하세요");
+    }
+}
+
+void OutOfLange() => WriteLine("\r\n0부터 3까지의 숫자를 입력하세요");

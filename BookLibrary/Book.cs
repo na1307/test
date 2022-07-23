@@ -1,7 +1,7 @@
 ﻿namespace BookLibrary;
 
-public class Book {
-    protected Book(int id, string title, string author, string publisher, string description) {
+public sealed class Book {
+    private Book(int id, string title, string author, string publisher, string description) {
         ID = id;
         Title = emptyCheck(title, "제목 없음");
         Author = emptyCheck(author, "저자 없음");
@@ -31,7 +31,7 @@ public class Book {
         IsBorrowed = false;
     }
 
-    public class Builder {
+    public sealed class Builder {
         private int id;
         private string title;
         private string author;
