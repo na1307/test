@@ -136,12 +136,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bow.cpp" />
+    <ClCompile Include="Gun.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Sword.cpp" />
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bow.h" />
+    <ClInclude Include="Gun.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="Sword.h" />
   </ItemGroup>
