@@ -6,30 +6,48 @@ public partial class FormMain : Form {
     public FormMain() => InitializeComponent();
 
     private void button1_Click(object sender, EventArgs e) {
-        var minValue = int.Parse(startBox.Text);
-        var maxValue = int.Parse(endBox.Text) + 1;
+        if (string.IsNullOrWhiteSpace(startBox.Text) || string.IsNullOrWhiteSpace(endBox.Text)) return;
 
-        if (minValue < 0) ErrMsg("최소값은 음수일 수 없습니다.");
+        try {
+            var minValue = int.Parse(startBox.Text);
+            var maxValue = int.Parse(endBox.Text) + 1;
 
-        if (!checkBox1.Checked) {
-            add(getRandom());
-        } else {
-            if (ints == null || (ints.Capacity == (maxValue - minValue) && ints.Count >= (maxValue - minValue)) || ints.Capacity != (maxValue - minValue)) {
-                listBox1.Items.Clear();
-                ints = new(maxValue - minValue);
-                add(getRandom());
-            } else {
-                int value;
-
-                do {
-                    value = getRandom();
-                } while (ints.Contains(value));
-
-                add(value);
+            if (minValue < 0) {
+                ErrMsg("최소값은 음수일 수 없습니다.");
+                return;
             }
+
+            if (minValue > maxValue) {
+                ErrMsg("최소값은 최대값보다 클 수 없습니다.");
+                return;
+            }
+
+            if (!checkBox1.Checked) {
+                if (ints != null) ints = null;
+
+                add(getRandom(minValue, maxValue));
+            } else {
+                if (ints == null || (ints.Capacity == (maxValue - minValue) && ints.Count >= (maxValue - minValue)) || ints.Capacity != (maxValue - minValue)) {
+                    listBox1.Items.Clear();
+                    ints = new(maxValue - minValue);
+                    add(getRandom(minValue, maxValue));
+                } else {
+                    int value;
+
+                    do {
+                        value = getRandom(minValue, maxValue);
+                    } while (ints.Contains(value));
+
+                    add(value);
+                }
+            }
+        } catch (FormatException) {
+            ErrMsg("숫자만 입력하세요.");
+        } catch (OverflowException) {
+            ErrMsg("숫자가 너무 큽니다.");
         }
 
-        int getRandom() => Random.Shared.Next(minValue, maxValue);
+        static int getRandom(int minValue, int maxValue) => Random.Shared.Next(minValue, maxValue);
 
         void add(int value) {
             numlabel.Text = value.ToString();
