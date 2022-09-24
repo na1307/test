@@ -1,4 +1,4 @@
-#include "Weapon.h"
+﻿#include "Weapon.h"
 using namespace std;
 
 Weapon::Weapon(string const &name) : name(name) {}

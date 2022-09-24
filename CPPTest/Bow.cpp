@@ -1,4 +1,4 @@
-#include "Bow.h"
+﻿#include "Bow.h"
 using namespace std;
 
 Bow::Bow() : Weapon("활") {}

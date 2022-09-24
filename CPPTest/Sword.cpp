@@ -1,4 +1,4 @@
-#include "Sword.h"
+﻿#include "Sword.h"
 using namespace std;
 
 Sword::Sword() : Weapon("검") {}
