@@ -24,6 +24,10 @@ Book book3 = book2 with { CloneId = 2 };
 
 WriteLine(book3);
 
+_ = BookContainer.Instance + book with { Id = 4, Title = "사딸라" };
+
+WriteLine(BookContainer.Instance[0]);
+
 #pragma warning disable S3903
 #pragma warning disable CA1050
 public record Book {
@@ -67,4 +71,37 @@ public record Book {
         Borrowed = false;
         WriteLine("반납 성공");
     }
+}
+
+/// <summary>
+/// 쓸데 없는 연산자 오버로딩
+/// </summary>
+public sealed class BookContainer {
+    private readonly List<Book> books;
+
+    public static BookContainer Instance { get; } = new();
+
+    public static BookContainer operator +(BookContainer container, Book book) {
+        container.books.Add(book);
+        return container;
+    }
+
+    public static BookContainer operator +(BookContainer container, IEnumerable<Book> books) {
+        container.books.AddRange(books);
+        return container;
+    }
+
+    public static BookContainer operator -(BookContainer container, int index) {
+        container.books.RemoveAt(index);
+        return container;
+    }
+
+    public static BookContainer operator -(BookContainer container, Book book) {
+        container.books.Remove(book);
+        return container;
+    }
+
+    private BookContainer() => books = new();
+
+    public Book this[int i] => books[i];
 }
