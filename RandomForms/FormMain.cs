@@ -10,7 +10,7 @@ public partial class FormMain : Form {
 
         try {
             var minValue = int.Parse(startBox.Text);
-            var maxValue = int.Parse(endBox.Text) + 1;
+            var maxValue = int.Parse(endBox.Text);
 
             if (minValue < 0) {
                 ErrMsg("최소값은 음수일 수 없습니다.");
@@ -21,6 +21,8 @@ public partial class FormMain : Form {
                 ErrMsg("최소값은 최대값보다 클 수 없습니다.");
                 return;
             }
+
+            maxValue++;
 
             if (!checkBox1.Checked) {
                 if (ints != null) ints = null;

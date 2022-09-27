@@ -131,6 +131,7 @@ partial class FormMain {
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "FormMain";
+            this.Text = "숫자 뽑기 프로그램";
             this.ResumeLayout(false);
             this.PerformLayout();
 
