@@ -27,17 +27,17 @@ public partial class FormMain : Form {
             if (!checkBox1.Checked) {
                 if (ints != null) ints = null;
 
-                add(getRandom(minValue, maxValue));
+                add(Random.Shared.Next(minValue, maxValue));
             } else {
                 if (ints == null || (ints.Capacity == (maxValue - minValue) && ints.Count >= (maxValue - minValue)) || ints.Capacity != (maxValue - minValue)) {
                     listBox1.Items.Clear();
                     ints = new(maxValue - minValue);
-                    add(getRandom(minValue, maxValue));
+                    add(Random.Shared.Next(minValue, maxValue));
                 } else {
                     int value;
 
                     do {
-                        value = getRandom(minValue, maxValue);
+                        value = Random.Shared.Next(minValue, maxValue);
                     } while (ints.Contains(value));
 
                     add(value);
@@ -48,8 +48,6 @@ public partial class FormMain : Form {
         } catch (OverflowException) {
             ErrMsg("숫자가 너무 큽니다.");
         }
-
-        static int getRandom(int minValue, int maxValue) => Random.Shared.Next(minValue, maxValue);
 
         void add(int value) {
             numlabel.Text = value.ToString();
