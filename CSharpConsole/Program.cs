@@ -1,6 +1,7 @@
-﻿using static System.Console;
+﻿using System.Diagnostics.CodeAnalysis;
+using static System.Console;
 
-Book book = new(1, "심영의 모험", "김두한", 4000);
+Book book = new(1, "사딸라", "김두한", 4000);
 
 WriteLine(book);
 
@@ -20,42 +21,29 @@ Book book2 = new() {
 
 WriteLine(book2);
 
-Book book3 = book2 with { CloneId = 2 };
+WriteLine(book2 with { CloneId = 2 });
 
-WriteLine(book3);
+#pragma warning disable CA1050,S3903
+public sealed record class Book {
+    public required int Id { get; init; }
+    public required string Title { get; init; }
+    public required string Author { get; init; }
+    public required int Price { get; init; }
+    public required int CloneId { get; init; }
+    public bool Borrowed { get; private set; } = false;
 
-_ = BookContainer.Instance + book with { Id = 4, Title = "사딸라" };
+    public Book() { }
 
-WriteLine(BookContainer.Instance[0]);
-
-#pragma warning disable S3903
-#pragma warning disable CA1050
-public record Book {
-    public int Id { get; init; }
-    public string Title { get; init; }
-    public string Author { get; init; }
-    public int Price { get; init; }
-    public int CloneId { get; init; }
-    public bool Borrowed { get; private set; }
-
-    public Book() {
-        Id = 0;
-        Title = string.Empty;
-        Author = string.Empty;
-        Price = 0;
-        CloneId = 1;
-        Borrowed = false;
-    }
-
+    [SetsRequiredMembers]
     public Book(int id, string title, string author, int price) : this(id, title, author, price, 1) { }
 
+    [SetsRequiredMembers]
     public Book(int id, string title, string author, int price, int cloneid) {
         Id = id;
         Title = title;
         Author = author;
         Price = price;
         CloneId = cloneid;
-        Borrowed = false;
     }
 
     public void Borrow() {
@@ -73,35 +61,19 @@ public record Book {
     }
 }
 
-/// <summary>
-/// 쓸데 없는 연산자 오버로딩
-/// </summary>
-public sealed class BookContainer {
-    private readonly List<Book> books;
+namespace System.Runtime.CompilerServices {
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
+    public sealed class RequiredMemberAttribute : Attribute { }
 
-    public static BookContainer Instance { get; } = new();
+    [AttributeUsage(AttributeTargets.All, AllowMultiple = true, Inherited = false)]
+    public sealed class CompilerFeatureRequiredAttribute : Attribute {
+        public string FeatureName { get; }
 
-    public static BookContainer operator +(BookContainer container, Book book) {
-        container.books.Add(book);
-        return container;
+        public CompilerFeatureRequiredAttribute(string featureName) => FeatureName = featureName;
     }
+}
 
-    public static BookContainer operator +(BookContainer container, IEnumerable<Book> books) {
-        container.books.AddRange(books);
-        return container;
-    }
-
-    public static BookContainer operator -(BookContainer container, int index) {
-        container.books.RemoveAt(index);
-        return container;
-    }
-
-    public static BookContainer operator -(BookContainer container, Book book) {
-        container.books.Remove(book);
-        return container;
-    }
-
-    private BookContainer() => books = new();
-
-    public Book this[int i] => books[i];
+namespace System.Diagnostics.CodeAnalysis {
+    [AttributeUsage(AttributeTargets.Constructor, AllowMultiple = false, Inherited = false)]
+    public sealed class SetsRequiredMembersAttribute : Attribute { }
 }
