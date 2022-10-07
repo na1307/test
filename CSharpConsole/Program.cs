@@ -1,29 +1,92 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using static System.Console;
 
-Book book = new(1, "사딸라", "김두한", 4000);
+WriteLine("1. Book");
+WriteLine("2. 가위 바위 보");
 
-WriteLine(book);
+while (true) {
+    Write("\r\n선택 : ");
 
-book.Borrow();
-WriteLine(book);
+    var line = ReadLine();
 
-book.Return();
-WriteLine(book);
+    WriteLine();
 
-Book book2 = new() {
-    Id = 10,
-    Title = "C# 프로그래밍",
-    Author = "몰?루",
-    Price = 5000,
-    CloneId = 1
-};
+    switch (line) {
+        case "1":
+            booktest();
+            return;
 
-WriteLine(book2);
+        case "2":
+            rps();
+            return;
 
-WriteLine(book2 with { CloneId = 2 });
+        default:
+            continue;
+    }
+}
 
-#pragma warning disable CA1050,S3903
+void booktest() {
+    Book book = new(1, "사딸라", "김두한", 4000);
+
+    WriteLine(book);
+
+    book.Borrow();
+    WriteLine(book);
+
+    book.Return();
+    WriteLine(book);
+
+    Book book2 = new() {
+        Id = 10,
+        Title = "C# 프로그래밍",
+        Author = "몰?루",
+        Price = 5000,
+        CloneId = 1
+    };
+
+    WriteLine(book2);
+
+    WriteLine(book2 with { CloneId = 2 });
+}
+
+void rps() {
+    while (true) {
+        WriteLine("가위 바위 보\r\n");
+
+        WriteLine("1. 가위");
+        WriteLine("2. 바위");
+        WriteLine("3. 보");
+
+        WriteLine();
+        WriteLine("0. 끝내기");
+
+        Write("\r\n당신의 선택은? : ");
+
+        try {
+            var input = int.Parse(ReadLine()!);
+
+            if (input is < 0 or > 3) continue;
+
+            if (input == 0) break;
+
+            var choice = (you: (RockPaperScissors)input, com: (RockPaperScissors)Random.Shared.Next(1, 4));
+
+            WriteLine($"\r\n당신 {choice.you} / {choice.com} 컴퓨터\r\n\r\n" + choice switch {
+                (RockPaperScissors.가위, RockPaperScissors.보) => true,
+                (RockPaperScissors.보, RockPaperScissors.가위) => false,
+                _ => choice.you != choice.com ? choice.you > choice.com : (bool?)null
+            } switch {
+                true => "당신이 이겼습니다!",
+                false => "컴퓨터가 이겼습니다!",
+                null => "비겼습니다!"
+            } + "\r\n");
+        } catch (Exception) {
+            //
+        }
+    }
+}
+
+#pragma warning disable CA1050, S3903
 public sealed record class Book {
     public required int Id { get; init; }
     public required string Title { get; init; }
@@ -60,6 +123,13 @@ public sealed record class Book {
         WriteLine("반납 성공");
     }
 }
+
+public enum RockPaperScissors {
+    가위 = 1,
+    바위,
+    보
+}
+#pragma warning restore
 
 namespace System.Runtime.CompilerServices {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
