@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RandomForms", "RandomForms.csproj", "{438F3F97-8F8F-444A-8500-DC83B9243A0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RandomForms", "RandomForms.csproj", "{438F3F97-8F8F-444A-8500-DC83B9243A0A}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "BluehillShared", "..\BluehillShared\BluehillShared\BluehillShared.shproj", "{924F3C61-E147-416F-B112-A070A8A04A82}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "BluehillShared.Forms", "..\BluehillShared\BluehillShared.Forms\BluehillShared.Forms.shproj", "{CB3AF7FC-E7F2-4A85-ADFF-E1095AEA9BA4}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "BluehillShared.Wpf", "..\BluehillShared\BluehillShared.Wpf\BluehillShared.Wpf.shproj", "{1203C637-39D4-4B72-9AD5-D0F06DCA37F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,5 +27,12 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8CC11525-A488-4BC4-86EC-DDBB28A1CE82}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\BluehillShared\BluehillShared.Wpf\BluehillShared.Wpf.projitems*{1203c637-39d4-4b72-9ad5-d0f06dca37f0}*SharedItemsImports = 13
+		..\BluehillShared\BluehillShared.Forms\BluehillShared.Forms.projitems*{438f3f97-8f8f-444a-8500-dc83b9243a0a}*SharedItemsImports = 5
+		..\BluehillShared\BluehillShared\BluehillShared.projitems*{438f3f97-8f8f-444a-8500-dc83b9243a0a}*SharedItemsImports = 5
+		..\BluehillShared\BluehillShared\BluehillShared.projitems*{924f3c61-e147-416f-b112-a070a8a04a82}*SharedItemsImports = 13
+		..\BluehillShared\BluehillShared.Forms\BluehillShared.Forms.projitems*{cb3af7fc-e7f2-4a85-adff-e1095aea9ba4}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,3 @@
+[submodule "BluehillShared"]
+	path = BluehillShared
+	url = https://github.com/na1307/BluehillShared.git

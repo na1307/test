@@ -14,7 +14,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Using Include="RandomForms.ErrDialog" Static="true"/>
+    <Using Include="BluehillShared.ErrDialogForms" Static="true" />
   </ItemGroup>
+
+  <Import Project="..\BluehillShared\BluehillShared\BluehillShared.projitems" Label="Shared" />
+
+  <Import Project="..\BluehillShared\BluehillShared.Forms\BluehillShared.Forms.projitems" Label="Shared" />
 
 </Project>
