@@ -50,6 +50,7 @@ partial class FormMain {
             this.startBox.Name = "startBox";
             this.startBox.Size = new System.Drawing.Size(100, 23);
             this.startBox.TabIndex = 1;
+            this.startBox.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
             // label2
             // 
@@ -66,6 +67,7 @@ partial class FormMain {
             this.endBox.Name = "endBox";
             this.endBox.Size = new System.Drawing.Size(100, 23);
             this.endBox.TabIndex = 3;
+            this.endBox.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
             // checkBox1
             // 
@@ -79,6 +81,7 @@ partial class FormMain {
             // 
             // button1
             // 
+            this.button1.Enabled = false;
             this.button1.Location = new System.Drawing.Point(12, 41);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(460, 50);

@@ -6,8 +6,6 @@ public partial class FormMain : Form {
     public FormMain() => InitializeComponent();
 
     private void button1_Click(object sender, EventArgs e) {
-        if (string.IsNullOrWhiteSpace(startBox.Text) || string.IsNullOrWhiteSpace(endBox.Text)) return;
-
         if (!int.TryParse(startBox.Text, out var minValue) || !int.TryParse(endBox.Text, out var maxValue)) {
             ErrMsg("숫자가 아닌 문자열을 입력했거나 숫자가 너무 큽니다.");
             return;
@@ -56,4 +54,6 @@ public partial class FormMain : Form {
         listBox1.Items.Clear();
         if (ints != null) ints = null;
     }
+
+    private void textBox_TextChanged(object sender, EventArgs e) => button1.Enabled = !string.IsNullOrWhiteSpace(startBox.Text) && !string.IsNullOrWhiteSpace(endBox.Text);
 }
