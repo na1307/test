@@ -45,6 +45,8 @@ public partial class FormMain : Form {
         void add(int value) {
             numlabel.Text = value.ToString();
             listBox1.Items.Add(value);
+            listBox1.SelectedIndex = listBox1.Items.Count - 1;
+            listBox1.SelectedIndex = -1;
             if (ints != null) ints.Add(value);
         }
     }
