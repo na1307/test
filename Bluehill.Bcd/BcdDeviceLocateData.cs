@@ -1,7 +1,13 @@
 ﻿namespace Bluehill.Bcd;
 
+/// <summary>
+/// Represents the root class of all locate device data types and specifies the locate type of the device.
+/// </summary>
 public abstract record class BcdDeviceLocateData : BcdDeviceData {
-    private protected BcdDeviceLocateData(DeviceType dType, BcdObject? addOptions, int type) : base(dType, addOptions) => Type = type;
+    private protected BcdDeviceLocateData(DeviceType dType, BcdObject? addOptions, LocateDeviceType type) : base(dType, addOptions) => Type = type;
 
-    public int Type { get; }
+    /// <summary>
+    /// The locate device type.
+    /// </summary>
+    public LocateDeviceType Type { get; }
 }

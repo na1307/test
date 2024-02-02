@@ -1,6 +1,10 @@
 ﻿namespace Bluehill.Bcd;
 
+/// <summary>
+/// Specifies the element types.
+/// </summary>
 public enum BcdElementType {
+#pragma warning disable CS1591 // 공개된 형식 또는 멤버에 대한 XML 주석이 없습니다.
     // BcdLibraryElementTypes
     BcdLibraryApplicationDevice = 0x11000001,
     BcdLibraryApplicationPath = 0x12000002,
@@ -155,4 +159,5 @@ public enum BcdElementType {
     BcdDeviceRamdiskMulticastEnabled = 0x36000009,
     BcdDeviceRamdiskMulticastTftpFallback = 0x3600000A,
     BcdDeviceRamdiskTftpVarWindow = 0x3600000B,
+#pragma warning restore CS1591 // 공개된 형식 또는 멤버에 대한 XML 주석이 없습니다.
 }
