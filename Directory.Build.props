@@ -1,0 +1,23 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
+    <Company>Bluehill</Company>
+    <Product>Bluehill.Bcd</Product>
+    <Copyright>Copyright © Bluehill 2024</Copyright>
+    <PackageProjectUrl>https://na1307.github.io/Bluehill.Bcd</PackageProjectUrl>
+    <PackageTags>Bcd;na1307;bluehill</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>https://na1307.github.io/Bluehill.Bcd/CHANGELOG.html</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/na1307/Bluehill.Bcd</RepositoryUrl>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net3.5-client' or '$(TargetFramework)' == 'net4.0-client'">
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+</Project>
