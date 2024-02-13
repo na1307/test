@@ -9,6 +9,8 @@ jobs:
   build:
     name: SonarCloud
     runs-on: windows-latest
+    env:
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages 
     steps:
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -54,6 +56,12 @@ jobs:
         run: |
           New-Item -Path .\dotnet-coverage -ItemType Directory
           dotnet tool update dotnet-coverage --tool-path .\dotnet-coverage
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}\.nuget\packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }} #hash of project files
+          restore-keys: ${{ runner.os }}-nuget-
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
