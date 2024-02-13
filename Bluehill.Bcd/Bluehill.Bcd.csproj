@@ -11,7 +11,7 @@
     <AssemblyOriginatorKeyFile>..\bluehill.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.Management" Version="8.0.0" Condition="'$(TargetFramework)' == 'net6.0-windows'" />
+    <PackageReference Include="System.Management" Condition="$(DefineConstants.Contains(NETCOREAPP))" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Management" />

@@ -10,13 +10,19 @@ public sealed record class BcdStore {
     private const string PathStartString = "BcdStore.FilePath='";
     private const string PathEndString = "'";
     private static readonly ManagementObject staticInstance = new(ScopeString, PathStartString + PathEndString, null);
+    private static readonly BcdStore systemStore = new(string.Empty);
 
     internal BcdStore(string fp) => FilePath = fp;
 
     /// <summary>
     /// The system store.
     /// </summary>
-    public static BcdStore SystemStore { get; } = new(string.Empty);
+    public static BcdStore SystemStore {
+        get {
+            AdminCheck();
+            return systemStore;
+        }
+    }
 
     /// <summary>
     /// A file path that uniquely identifies the store. The system store is denoted by an empty string.

@@ -6,7 +6,8 @@ namespace Bluehill.Bcd;
 
 internal static class Internal {
     public const string ScopeString = "root\\WMI";
-    private static readonly bool isAdmin = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+
+    private static bool isAdmin => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void AdminCheck() {
