@@ -62,8 +62,6 @@ public sealed record class BcdStore {
             inParam["File"] = filePath;
 
             var outParam = staticInstance.InvokeMethod(nameof(CreateStore), inParam, null);
-            ReturnValueCheck(outParam);
-
             var createdStore = (ManagementBaseObject)outParam["Store"];
 
             return new((string)createdStore[nameof(FilePath)]);
@@ -96,8 +94,6 @@ public sealed record class BcdStore {
             inParam["File"] = filePath;
 
             var outParam = staticInstance.InvokeMethod(nameof(OpenStore), inParam, null);
-            ReturnValueCheck(outParam);
-
             var store = (ManagementBaseObject)outParam["Store"];
 
             return new((string)store[nameof(FilePath)]);
@@ -120,8 +116,6 @@ public sealed record class BcdStore {
             inParam["Id"] = id.ToString("B");
 
             var outParam = getOutParam(inParam);
-            ReturnValueCheck(outParam);
-
             var bo = (ManagementBaseObject)outParam["Object"];
 
             return new(this, Guid.Parse((string)bo["id"]), (BcdObjectType)(uint)bo["Type"]);
@@ -146,8 +140,6 @@ public sealed record class BcdStore {
             inParam["Type"] = type;
 
             var outParam = getOutParam(inParam);
-            ReturnValueCheck(outParam);
-
             var bo = (ManagementBaseObject)outParam["Object"];
 
             return new(this, Guid.Parse((string)bo["Id"]), (BcdObjectType)(uint)bo["Type"]);
@@ -173,8 +165,6 @@ public sealed record class BcdStore {
             inParam["Flags"] = flags;
 
             var outParam = getOutParam(inParam);
-            ReturnValueCheck(outParam);
-
             var bo = (ManagementBaseObject)outParam["Object"];
 
             return new(this, Guid.Parse((string)bo["Id"]), (BcdObjectType)(uint)bo["Type"]);
@@ -184,5 +174,10 @@ public sealed record class BcdStore {
     }
 
     private ManagementBaseObject getInParam([CallerMemberName] string? methodName = default) => classInstance.GetMethodParameters(methodName);
-    private ManagementBaseObject getOutParam(ManagementBaseObject inParam, [CallerMemberName] string? methodName = default) => classInstance.InvokeMethod(methodName, inParam, null);
+
+    private ManagementBaseObject getOutParam(ManagementBaseObject inParam, [CallerMemberName] string? methodName = default) {
+        var outParam = classInstance.InvokeMethod(methodName, inParam, null);
+        ReturnValueCheck(outParam);
+        return outParam;
+    }
 }

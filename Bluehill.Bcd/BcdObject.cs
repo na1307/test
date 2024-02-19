@@ -45,7 +45,6 @@ public sealed record class BcdObject {
         try {
             var inParam = getInParam();
             var outParam = getOutParam(inParam);
-            ReturnValueCheck(outParam);
 
             return ((ManagementBaseObject[])outParam["Elements"]).Select(getElement).ToArray();
         } catch (ManagementException err) {
@@ -64,7 +63,6 @@ public sealed record class BcdObject {
         try {
             var inParam = getInParam();
             var outParam = getOutParam(inParam);
-            ReturnValueCheck(outParam);
 
             return ((uint[])outParam["Types"]).Select(i => (BcdElementType)i).ToArray();
         } catch (ManagementException err) {
@@ -86,7 +84,6 @@ public sealed record class BcdObject {
             inParam["Type"] = type;
 
             var outParam = getOutParam(inParam);
-            ReturnValueCheck(outParam);
 
             return getElement((ManagementBaseObject)outParam["Element"]);
         } catch (ManagementException err) {
@@ -112,7 +109,6 @@ public sealed record class BcdObject {
             inParam["Flags"] = flags;
 
             var outParam = getOutParam(inParam);
-            ReturnValueCheck(outParam);
 
             foreach (var property in ((ManagementBaseObject)outParam["Element"]).Properties) {
                 switch (property.Name) {
@@ -183,8 +179,7 @@ public sealed record class BcdObject {
             inParam["AdditionalOptions"] = additionalOptions?.Id.ToString("B") ?? string.Empty;
             inParam["Path"] = path;
 
-            var outParam = getOutParam(inParam);
-            ReturnValueCheck(outParam);
+            getOutParam(inParam);
         } catch (ManagementException err) {
             throw new BcdException(err);
         }
@@ -210,8 +205,7 @@ public sealed record class BcdObject {
             inParam["Path"] = path;
             inParam["Flags"] = flags;
 
-            var outParam = getOutParam(inParam);
-            ReturnValueCheck(outParam);
+            getOutParam(inParam);
         } catch (ManagementException err) {
             throw new BcdException(err);
         }
@@ -241,8 +235,7 @@ public sealed record class BcdObject {
             inParam["ParentAdditionalOptions"] = parentAdditionalOptions?.Id.ToString("B") ?? string.Empty;
             inParam["ParentPath"] = parentPath;
 
-            var outParam = getOutParam(inParam);
-            ReturnValueCheck(outParam);
+            getOutParam(inParam);
         } catch (ManagementException err) {
             throw new BcdException(err);
         }
@@ -270,8 +263,7 @@ public sealed record class BcdObject {
             inParam["ParentPath"] = parentPath;
             inParam["CustomLocate"] = customLocate;
 
-            var outParam = getOutParam(inParam);
-            ReturnValueCheck(outParam);
+            getOutParam(inParam);
         } catch (ManagementException err) {
             throw new BcdException(err);
         }
@@ -295,8 +287,7 @@ public sealed record class BcdObject {
             inParam["DiskSignature"] = diskSignature;
             inParam["PartitionIdentifier"] = partitionIdentifer;
 
-            var outParam = getOutParam(inParam);
-            ReturnValueCheck(outParam);
+            getOutParam(inParam);
         } catch (ManagementException err) {
             throw new BcdException(err);
         }
@@ -316,8 +307,7 @@ public sealed record class BcdObject {
             inParam["Type"] = type;
             inParam["Id"] = @object.Id.ToString("B");
 
-            var outParam = getOutParam(inParam);
-            ReturnValueCheck(outParam);
+            getOutParam(inParam);
         } catch (ManagementException err) {
             throw new BcdException(err);
         }
@@ -342,8 +332,7 @@ public sealed record class BcdObject {
             inParam["Type"] = type;
             inParam["Ids"] = objects.Select(o => o.Id.ToString("B")).ToArray();
 
-            var outParam = getOutParam(inParam);
-            ReturnValueCheck(outParam);
+            getOutParam(inParam);
         } catch (ManagementException err) {
             throw new BcdException(err);
         }
@@ -361,15 +350,19 @@ public sealed record class BcdObject {
             var inParam = getInParam();
             inParam["Type"] = type;
 
-            var outParam = getOutParam(inParam);
-            ReturnValueCheck(outParam);
+            getOutParam(inParam);
         } catch (ManagementException err) {
             throw new BcdException(err);
         }
     }
 
     private ManagementBaseObject getInParam([CallerMemberName] string? methodName = default) => classInstance.GetMethodParameters(methodName);
-    private ManagementBaseObject getOutParam(ManagementBaseObject inParam, [CallerMemberName] string? methodName = default) => classInstance.InvokeMethod(methodName, inParam, null);
+
+    private ManagementBaseObject getOutParam(ManagementBaseObject inParam, [CallerMemberName] string? methodName = default) {
+        var outParam = classInstance.InvokeMethod(methodName, inParam, null);
+        ReturnValueCheck(outParam);
+        return outParam;
+    }
 
     private object getElement(ManagementBaseObject element) {
         foreach (var property in element.Properties) {
@@ -441,8 +434,7 @@ public sealed record class BcdObject {
             inParam["Type"] = type;
             inParam[paramName] = value;
 
-            var outParam = getOutParam(inParam, methodName);
-            ReturnValueCheck(outParam);
+            getOutParam(inParam, methodName);
         } catch (ManagementException err) {
             throw new BcdException(err);
         }
