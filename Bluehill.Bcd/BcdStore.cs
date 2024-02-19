@@ -7,12 +7,13 @@ namespace Bluehill.Bcd;
 /// <summary>
 /// Represents a BCD store that contains a collection of BCD objects.
 /// </summary>
-public sealed record class BcdStore {
+public sealed record class BcdStore : IDisposable {
     private const string pathStartString = "BcdStore.FilePath='";
     private const string pathEndString = "'";
     private static readonly ManagementObject staticInstance = new(ScopeString, pathStartString + pathEndString, null);
     private static readonly BcdStore systemStore = new(string.Empty);
     private readonly ManagementObject classInstance;
+    private bool disposedValue;
 
     internal BcdStore(string fp) {
         FilePath = fp;
@@ -109,7 +110,7 @@ public sealed record class BcdStore {
     /// <returns>The object.</returns>
     /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
     public BcdObject OpenObject(Guid id) {
-        AdminCheck();
+        check();
 
         try {
             var inParam = getInParam();
@@ -132,7 +133,7 @@ public sealed record class BcdStore {
     /// <returns>The object.</returns>
     /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
     public BcdObject CreateObject(Guid id, BcdObjectType type) {
-        AdminCheck();
+        check();
 
         try {
             var inParam = getInParam();
@@ -156,7 +157,7 @@ public sealed record class BcdStore {
     /// <returns>A Bcdobject instance that represents the copied object.</returns>
     /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
     public BcdObject CopyObject(BcdObject source, CopyObjectOptions flags) {
-        AdminCheck();
+        check();
 
         try {
             var inParam = getInParam();
@@ -171,6 +172,34 @@ public sealed record class BcdStore {
         } catch (ManagementException err) {
             throw new BcdException(err);
         }
+    }
+
+    /// <inheritdoc/>
+    public void Dispose() {
+        if (IsSystemStore) {
+            throw new InvalidOperationException("The system store cannot be disposed.");
+        }
+
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
+
+    private void Dispose(bool disposing) {
+        if (!disposedValue) {
+            if (disposing) {
+                classInstance.Dispose();
+            }
+
+            disposedValue = true;
+        }
+    }
+
+    private void check() {
+        if (disposedValue) {
+            throw new ObjectDisposedException(nameof(BcdStore));
+        }
+
+        AdminCheck();
     }
 
     private ManagementBaseObject getInParam([CallerMemberName] string? methodName = default) => classInstance.GetMethodParameters(methodName);

@@ -8,8 +8,9 @@ namespace Bluehill.Bcd;
 /// <summary>
 /// Represents a BCD object that contains a collection of BCD elements. Each BCD object is identified by a GUID.
 /// </summary>
-public sealed record class BcdObject {
+public sealed record class BcdObject : IDisposable {
     private readonly ManagementObject classInstance;
+    private bool disposedValue;
 
     internal BcdObject(BcdStore store, Guid id, BcdObjectType type) {
         AdminCheck();
@@ -40,7 +41,7 @@ public sealed record class BcdObject {
     /// <returns>An array of elements.</returns>
     /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
     public object[] EnumerateElements() {
-        AdminCheck();
+        check();
 
         try {
             var inParam = getInParam();
@@ -58,7 +59,7 @@ public sealed record class BcdObject {
     /// <returns>An array of element types.</returns>
     /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
     public BcdElementType[] EnumerateElementTypes() {
-        AdminCheck();
+        check();
 
         try {
             var inParam = getInParam();
@@ -77,7 +78,7 @@ public sealed record class BcdObject {
     /// <returns>The element.</returns>
     /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
     public object GetElement(BcdElementType type) {
-        AdminCheck();
+        check();
 
         try {
             var inParam = getInParam();
@@ -101,7 +102,7 @@ public sealed record class BcdObject {
     /// <returns>The element.</returns>
     /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
     public object GetElementWithFlags(BcdElementType type, GetElementWithFlagsOptions flags) {
-        AdminCheck();
+        check();
 
         try {
             var inParam = getInParam();
@@ -170,7 +171,7 @@ public sealed record class BcdObject {
     /// <param name="path">The partition path.</param>
     /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
     public void SetPartitionDeviceElement(BcdElementType type, DeviceType deviceType, BcdObject? additionalOptions, string path) {
-        AdminCheck();
+        check();
 
         try {
             var inParam = getInParam();
@@ -195,7 +196,7 @@ public sealed record class BcdObject {
     /// <param name="flags">The flags.</param>
     /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
     public void SetPartitionDeviceElementWithFlags(BcdElementType type, DeviceType deviceType, BcdObject? additionalOptions, string path, SetPartitionDeviceElementWithFlagsOptions flags) {
-        AdminCheck();
+        check();
 
         try {
             var inParam = getInParam();
@@ -223,7 +224,7 @@ public sealed record class BcdObject {
     /// <param name="parentPath">The path of the parent. This parameter can be an empty string if the parent device is of a type that does not have a path.</param>
     /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
     public void SetFileDeviceElement(BcdElementType type, DeviceType deviceType, BcdObject? additionalOptions, string path, DeviceType parentDeviceType, BcdObject? parentAdditionalOptions, string parentPath) {
-        AdminCheck();
+        check();
 
         try {
             var inParam = getInParam();
@@ -252,7 +253,7 @@ public sealed record class BcdObject {
     /// <param name="customLocate">A BCD element that overrides the default locate heuristics for a VHD device.<br/><br/>If this parameter is zero, the application path (for example, \Windows\System32\winload.exe) is used to locate a boot device and the system root element (\Windows) is used to locate an operating system device.</param>
     /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
     public void SetVhdDeviceElement(BcdElementType type, string path, DeviceType parentDeviceType, BcdObject? parentAdditionalOptions, string parentPath, long customLocate) {
-        AdminCheck();
+        check();
 
         try {
             var inParam = getInParam();
@@ -278,7 +279,7 @@ public sealed record class BcdObject {
     /// <param name="partitionIdentifer">If the PartitionStyle parameter is GPT, the PartitionIdentifier parameter is the partition signature as a GUID in string format (for example, "{6efb52bf-1766-41db-a6b3-0ee5eff72bd7}" ). If the PartitionStyle parameter is MBR, the PartitionIdentifier parameter is the decimal MBR partition offset in string format (for example, "82837504" for 0x4F00000).</param>
     /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
     public void SetQualifiedPartitionDeviceElement(BcdElementType type, PartitionStyle partitionStyle, string diskSignature, string partitionIdentifer) {
-        AdminCheck();
+        check();
 
         try {
             var inParam = getInParam();
@@ -300,7 +301,7 @@ public sealed record class BcdObject {
     /// <param name="object">The object.</param>
     /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
     public void SetObjectElement(BcdElementType type, BcdObject @object) {
-        AdminCheck();
+        check();
 
         try {
             var inParam = getInParam();
@@ -325,7 +326,7 @@ public sealed record class BcdObject {
             throw new ArgumentException($"'{nameof(objects)}' cannot be Null or empty.", nameof(objects));
         }
 
-        AdminCheck();
+        check();
 
         try {
             var inParam = getInParam();
@@ -344,7 +345,7 @@ public sealed record class BcdObject {
     /// <param name="type">The element type.</param>
     /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
     public void DeleteElement(BcdElementType type) {
-        AdminCheck();
+        check();
 
         try {
             var inParam = getInParam();
@@ -354,6 +355,30 @@ public sealed record class BcdObject {
         } catch (ManagementException err) {
             throw new BcdException(err);
         }
+    }
+
+    /// <inheritdoc/>
+    public void Dispose() {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
+
+    private void Dispose(bool disposing) {
+        if (!disposedValue) {
+            if (disposing) {
+                classInstance.Dispose();
+            }
+
+            disposedValue = true;
+        }
+    }
+
+    private void check() {
+        if (disposedValue) {
+            throw new ObjectDisposedException(nameof(BcdObject));
+        }
+
+        AdminCheck();
     }
 
     private ManagementBaseObject getInParam([CallerMemberName] string? methodName = default) => classInstance.GetMethodParameters(methodName);
@@ -427,7 +452,7 @@ public sealed record class BcdObject {
     }
 
     private void setElement(BcdElementType type, object value, string paramName, [CallerMemberName] string? methodName = default) {
-        AdminCheck();
+        check();
 
         try {
             var inParam = getInParam(methodName);
