@@ -53,7 +53,7 @@ public sealed record class BcdObject {
 
             foreach (PropertyData property in ((ManagementBaseObject)outParam["Element"]).Properties) {
                 switch (property.Name) {
-                    case "String" or "Integer" or "Boolean":
+                    case "String" or "Integer" or "Boolean" or "Integers":
                         return property.Value;
 
                     case "Device":
