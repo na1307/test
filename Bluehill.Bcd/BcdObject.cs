@@ -35,6 +35,26 @@ public sealed record class BcdObject {
     public BcdObjectType Type { get; }
 
     /// <summary>
+    /// Enumerates the elements in the object.
+    /// </summary>
+    /// <returns>An array of elements.</returns>
+    /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
+    public object[] EnumerateElements() {
+        AdminCheck();
+
+        try {
+            ManagementObject classInstance = new(ScopeString, pathStartString + Id.ToString("B") + pathMiddleString + Store.FilePath + pathEndString, null);
+            var inParam = classInstance.GetMethodParameters(nameof(EnumerateElements));
+            var outParam = classInstance.InvokeMethod(nameof(EnumerateElements), inParam, null);
+            ReturnValueCheck(outParam);
+
+            return ((ManagementBaseObject[])outParam["Elements"]).Select(getElement).ToArray();
+        } catch (ManagementException err) {
+            throw new BcdException(err);
+        }
+    }
+
+    /// <summary>
     /// Enumerates the types of elements in the object.
     /// </summary>
     /// <returns>An array of element types.</returns>
@@ -71,29 +91,7 @@ public sealed record class BcdObject {
             var outParam = classInstance.InvokeMethod(nameof(GetElement), inParam, null);
             ReturnValueCheck(outParam);
 
-            foreach (var property in ((ManagementBaseObject)outParam["Element"]).Properties) {
-                switch (property.Name) {
-                    case "String" or "Integer" or "Boolean" or "Integers":
-                        return property.Value;
-
-                    case "Device":
-                        return getDeviceData((ManagementBaseObject)property.Value);
-
-                    case "Id":
-                        return Store.OpenObject(Guid.Parse((string)property.Value));
-
-                    case "Ids":
-                        return ((string[])property.Value).Select(s => Store.OpenObject(Guid.Parse(s))).ToArray();
-
-                    case "StoreFilePath" or "ObjectId" or "Type":
-                        break;
-
-                    default:
-                        throw new BcdException("Unknown " + property.Name);
-                }
-            }
-
-            throw new BcdException("Unknown1");
+            return getElement((ManagementBaseObject)outParam["Element"]);
         } catch (ManagementException err) {
             throw new BcdException(err);
         } catch (COMException cex) when (cex.HResult == -805305819) {
@@ -380,6 +378,32 @@ public sealed record class BcdObject {
         } catch (ManagementException err) {
             throw new BcdException(err);
         }
+    }
+
+    private object getElement(ManagementBaseObject element) {
+        foreach (var property in element.Properties) {
+            switch (property.Name) {
+                case "String" or "Integer" or "Boolean" or "Integers":
+                    return property.Value;
+
+                case "Device":
+                    return getDeviceData((ManagementBaseObject)property.Value);
+
+                case "Id":
+                    return Store.OpenObject(Guid.Parse((string)property.Value));
+
+                case "Ids":
+                    return ((string[])property.Value).Select(s => Store.OpenObject(Guid.Parse(s))).ToArray();
+
+                case "StoreFilePath" or "ObjectId" or "Type":
+                    break;
+
+                default:
+                    throw new BcdException("Unknown " + property.Name);
+            }
+        }
+
+        throw new BcdException("Unknown1");
     }
 
     private BcdDeviceData getDeviceData(ManagementBaseObject deviceData) {
