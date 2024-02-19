@@ -178,6 +178,34 @@ public sealed record class BcdObject {
     }
 
     /// <summary>
+    /// Sets the specified partition device element. This method is identical to <see cref="SetPartitionDeviceElement"/> except it takes additional flags.
+    /// </summary>
+    /// <param name="type">The element type.</param>
+    /// <param name="deviceType">The device type.</param>
+    /// <param name="additionalOptions">Either another object in the store, or <see langword="null"/>.</param>
+    /// <param name="path">The partition path.</param>
+    /// <param name="flags">The flags.</param>
+    /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
+    public void SetPartitionDeviceElementWithFlags(BcdElementType type, DeviceType deviceType, BcdObject? additionalOptions, string path, SetPartitionDeviceElementWithFlagsOptions flags) {
+        AdminCheck();
+
+        try {
+            ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
+            var inParam = classInstance.GetMethodParameters(nameof(SetPartitionDeviceElementWithFlags));
+            inParam["Type"] = type;
+            inParam["DeviceType"] = deviceType;
+            inParam["AdditionalOptions"] = additionalOptions?.Id.ToString("B") ?? string.Empty;
+            inParam["Path"] = path;
+            inParam["Flags"] = flags;
+
+            var outParam = classInstance.InvokeMethod(nameof(SetPartitionDeviceElementWithFlags), inParam, null);
+            ReturnValueCheck(outParam);
+        } catch (ManagementException err) {
+            throw new BcdException(err);
+        }
+    }
+
+    /// <summary>
     /// Sets the specified file device element.
     /// </summary>
     /// <param name="type">The element type.</param>
