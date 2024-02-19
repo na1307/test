@@ -53,13 +53,13 @@ public sealed record class BcdStore {
         AdminCheck();
 
         try {
-            ManagementBaseObject inParam = staticInstance.GetMethodParameters(nameof(CreateStore));
+            var inParam = staticInstance.GetMethodParameters(nameof(CreateStore));
             inParam["File"] = filePath;
 
-            ManagementBaseObject outParam = staticInstance.InvokeMethod(nameof(CreateStore), inParam, null);
+            var outParam = staticInstance.InvokeMethod(nameof(CreateStore), inParam, null);
             ReturnValueCheck(outParam);
 
-            ManagementBaseObject createdStore = (ManagementBaseObject)outParam["Store"];
+            var createdStore = (ManagementBaseObject)outParam["Store"];
 
             return new((string)createdStore[nameof(FilePath)]);
         } catch (ManagementException err) {
@@ -87,13 +87,13 @@ public sealed record class BcdStore {
         AdminCheck();
 
         try {
-            ManagementBaseObject inParam = staticInstance.GetMethodParameters(nameof(OpenStore));
+            var inParam = staticInstance.GetMethodParameters(nameof(OpenStore));
             inParam["File"] = filePath;
 
-            ManagementBaseObject outParam = staticInstance.InvokeMethod(nameof(OpenStore), inParam, null);
+            var outParam = staticInstance.InvokeMethod(nameof(OpenStore), inParam, null);
             ReturnValueCheck(outParam);
 
-            ManagementBaseObject store = (ManagementBaseObject)outParam["Store"];
+            var store = (ManagementBaseObject)outParam["Store"];
 
             return new((string)store[nameof(FilePath)]);
         } catch (ManagementException err) {
@@ -112,10 +112,10 @@ public sealed record class BcdStore {
 
         try {
             ManagementObject classInstance = new(ScopeString, PathStartString + FilePath + PathEndString, null);
-            ManagementBaseObject inParam = classInstance.GetMethodParameters(nameof(OpenObject));
+            var inParam = classInstance.GetMethodParameters(nameof(OpenObject));
             inParam["Id"] = id.ToString("B");
 
-            ManagementBaseObject outParam = classInstance.InvokeMethod(nameof(OpenObject), inParam, null);
+            var outParam = classInstance.InvokeMethod(nameof(OpenObject), inParam, null);
             ReturnValueCheck(outParam);
 
             var bo = (ManagementBaseObject)outParam["Object"];
@@ -138,11 +138,11 @@ public sealed record class BcdStore {
 
         try {
             ManagementObject classInstance = new(ScopeString, PathStartString + FilePath + PathEndString, null);
-            ManagementBaseObject inParam = classInstance.GetMethodParameters(nameof(CreateObject));
+            var inParam = classInstance.GetMethodParameters(nameof(CreateObject));
             inParam["Id"] = id.ToString("B");
             inParam["Type"] = type;
 
-            ManagementBaseObject outParam = classInstance.InvokeMethod(nameof(CreateObject), inParam, null);
+            var outParam = classInstance.InvokeMethod(nameof(CreateObject), inParam, null);
             ReturnValueCheck(outParam);
 
             var bo = (ManagementBaseObject)outParam["Object"];
@@ -165,12 +165,12 @@ public sealed record class BcdStore {
 
         try {
             ManagementObject classInstance = new(ScopeString, PathStartString + FilePath + PathEndString, null);
-            ManagementBaseObject inParam = classInstance.GetMethodParameters(nameof(CopyObject));
+            var inParam = classInstance.GetMethodParameters(nameof(CopyObject));
             inParam["SourceStoreFile"] = source.Store.FilePath;
             inParam["SourceId"] = source.Id.ToString("B");
             inParam["Flags"] = flags;
 
-            ManagementBaseObject outParam = classInstance.InvokeMethod(nameof(CopyObject), inParam, null);
+            var outParam = classInstance.InvokeMethod(nameof(CopyObject), inParam, null);
             ReturnValueCheck(outParam);
 
             var bo = (ManagementBaseObject)outParam["Object"];

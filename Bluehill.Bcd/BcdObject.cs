@@ -45,13 +45,62 @@ public sealed record class BcdObject {
 
         try {
             ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
-            ManagementBaseObject inParam = classInstance.GetMethodParameters(nameof(GetElement));
+            var inParam = classInstance.GetMethodParameters(nameof(GetElement));
             inParam["Type"] = type;
 
-            ManagementBaseObject outParam = classInstance.InvokeMethod(nameof(GetElement), inParam, null);
+            var outParam = classInstance.InvokeMethod(nameof(GetElement), inParam, null);
             ReturnValueCheck(outParam);
 
-            foreach (PropertyData property in ((ManagementBaseObject)outParam["Element"]).Properties) {
+            foreach (var property in ((ManagementBaseObject)outParam["Element"]).Properties) {
+                switch (property.Name) {
+                    case "String" or "Integer" or "Boolean" or "Integers":
+                        return property.Value;
+
+                    case "Device":
+                        return getDeviceData((ManagementBaseObject)property.Value);
+
+                    case "Id":
+                        return Store.OpenObject(Guid.Parse((string)property.Value));
+
+                    case "Ids":
+                        return ((string[])property.Value).Select(s => Store.OpenObject(Guid.Parse(s))).ToArray();
+
+                    case "StoreFilePath" or "ObjectId" or "Type":
+                        break;
+
+                    default:
+                        throw new BcdException("Unknown " + property.Name);
+                }
+            }
+
+            throw new BcdException("Unknown1");
+        } catch (ManagementException err) {
+            throw new BcdException(err);
+        } catch (COMException cex) when (cex.HResult == -805305819) {
+            throw new BcdException("Element not found.", cex);
+        }
+    }
+
+    /// <summary>
+    /// Gets the specified element. This method can be used to enumerate a qualified partition.
+    /// </summary>
+    /// <param name="type">The element type.</param>
+    /// <param name="flags">The flags.</param>
+    /// <returns>The element.</returns>
+    /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
+    public object GetElementWithFlags(BcdElementType type, GetElementWithFlagsOptions flags) {
+        AdminCheck();
+
+        try {
+            ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
+            var inParam = classInstance.GetMethodParameters(nameof(GetElementWithFlags));
+            inParam["Type"] = type;
+            inParam["Flags"] = flags;
+
+            var outParam = classInstance.InvokeMethod(nameof(GetElementWithFlags), inParam, null);
+            ReturnValueCheck(outParam);
+
+            foreach (var property in ((ManagementBaseObject)outParam["Element"]).Properties) {
                 switch (property.Name) {
                     case "String" or "Integer" or "Boolean" or "Integers":
                         return property.Value;
@@ -115,13 +164,13 @@ public sealed record class BcdObject {
 
         try {
             ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
-            ManagementBaseObject inParam = classInstance.GetMethodParameters(nameof(SetPartitionDeviceElement));
+            var inParam = classInstance.GetMethodParameters(nameof(SetPartitionDeviceElement));
             inParam["Type"] = type;
             inParam["DeviceType"] = deviceType;
             inParam["AdditionalOptions"] = additionalOptions?.Id.ToString("B") ?? string.Empty;
             inParam["Path"] = path;
 
-            ManagementBaseObject outParam = classInstance.InvokeMethod(nameof(SetPartitionDeviceElement), inParam, null);
+            var outParam = classInstance.InvokeMethod(nameof(SetPartitionDeviceElement), inParam, null);
             ReturnValueCheck(outParam);
         } catch (ManagementException err) {
             throw new BcdException(err);
@@ -144,7 +193,7 @@ public sealed record class BcdObject {
 
         try {
             ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
-            ManagementBaseObject inParam = classInstance.GetMethodParameters(nameof(SetFileDeviceElement));
+            var inParam = classInstance.GetMethodParameters(nameof(SetFileDeviceElement));
             inParam["Type"] = type;
             inParam["DeviceType"] = deviceType;
             inParam["AdditionalOptions"] = additionalOptions?.Id.ToString("B") ?? string.Empty;
@@ -153,7 +202,7 @@ public sealed record class BcdObject {
             inParam["ParentAdditionalOptions"] = parentAdditionalOptions?.Id.ToString("B") ?? string.Empty;
             inParam["ParentPath"] = parentPath;
 
-            ManagementBaseObject outParam = classInstance.InvokeMethod(nameof(SetFileDeviceElement), inParam, null);
+            var outParam = classInstance.InvokeMethod(nameof(SetFileDeviceElement), inParam, null);
             ReturnValueCheck(outParam);
         } catch (ManagementException err) {
             throw new BcdException(err);
@@ -175,7 +224,7 @@ public sealed record class BcdObject {
 
         try {
             ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
-            ManagementBaseObject inParam = classInstance.GetMethodParameters(nameof(SetVhdDeviceElement));
+            var inParam = classInstance.GetMethodParameters(nameof(SetVhdDeviceElement));
             inParam["Type"] = type;
             inParam["Path"] = path;
             inParam["ParentDeviceType"] = parentDeviceType;
@@ -183,7 +232,7 @@ public sealed record class BcdObject {
             inParam["ParentPath"] = parentPath;
             inParam["CustomLocate"] = customLocate;
 
-            ManagementBaseObject outParam = classInstance.InvokeMethod(nameof(SetVhdDeviceElement), inParam, null);
+            var outParam = classInstance.InvokeMethod(nameof(SetVhdDeviceElement), inParam, null);
             ReturnValueCheck(outParam);
         } catch (ManagementException err) {
             throw new BcdException(err);
@@ -201,11 +250,11 @@ public sealed record class BcdObject {
 
         try {
             ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
-            ManagementBaseObject inParam = classInstance.GetMethodParameters(nameof(SetObjectElement));
+            var inParam = classInstance.GetMethodParameters(nameof(SetObjectElement));
             inParam["Type"] = type;
             inParam["Id"] = @object.Id.ToString("B");
 
-            ManagementBaseObject outParam = classInstance.InvokeMethod(nameof(SetObjectElement), inParam, null);
+            var outParam = classInstance.InvokeMethod(nameof(SetObjectElement), inParam, null);
             ReturnValueCheck(outParam);
         } catch (ManagementException err) {
             throw new BcdException(err);
@@ -228,11 +277,11 @@ public sealed record class BcdObject {
 
         try {
             ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
-            ManagementBaseObject inParam = classInstance.GetMethodParameters(nameof(SetObjectListElement));
+            var inParam = classInstance.GetMethodParameters(nameof(SetObjectListElement));
             inParam["Type"] = type;
             inParam["Ids"] = objects.Select(o => o.Id.ToString("B")).ToArray();
 
-            ManagementBaseObject outParam = classInstance.InvokeMethod(nameof(SetObjectListElement), inParam, null);
+            var outParam = classInstance.InvokeMethod(nameof(SetObjectListElement), inParam, null);
             ReturnValueCheck(outParam);
         } catch (ManagementException err) {
             throw new BcdException(err);
@@ -240,11 +289,11 @@ public sealed record class BcdObject {
     }
 
     private BcdDeviceData getDeviceData(ManagementBaseObject deviceData) {
-        DeviceType type = (DeviceType)(uint)deviceData["DeviceType"];
+        var type = (DeviceType)(uint)deviceData["DeviceType"];
         var addOptionsString = (string)deviceData["AdditionalOptions"];
-        BcdObject? addOptions = string.IsNullOrEmpty(addOptionsString) ? null : Store.OpenObject(Guid.Parse(addOptionsString));
+        var addOptions = string.IsNullOrEmpty(addOptionsString) ? null : Store.OpenObject(Guid.Parse(addOptionsString));
 
-        foreach (PropertyData property in deviceData.Properties) {
+        foreach (var property in deviceData.Properties) {
             switch (property.Origin) {
                 case nameof(BcdDevicePartitionData):
                     return new BcdDevicePartitionData(type, addOptions, (string)deviceData["Path"]);
@@ -280,11 +329,11 @@ public sealed record class BcdObject {
 
         try {
             ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
-            ManagementBaseObject inParam = classInstance.GetMethodParameters(methodName);
+            var inParam = classInstance.GetMethodParameters(methodName);
             inParam["Type"] = type;
             inParam[paramName] = value;
 
-            ManagementBaseObject outParam = classInstance.InvokeMethod(methodName, inParam, null);
+            var outParam = classInstance.InvokeMethod(methodName, inParam, null);
             ReturnValueCheck(outParam);
         } catch (ManagementException err) {
             throw new BcdException(err);
