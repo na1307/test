@@ -240,6 +240,32 @@ public sealed record class BcdObject {
     }
 
     /// <summary>
+    /// Sets a qualified boot partition device.
+    /// </summary>
+    /// <param name="type">The element type.</param>
+    /// <param name="partitionStyle">The partition style.</param>
+    /// <param name="diskSignature">If the PartitionStyle parameter is GPT, the DiskSignature parameter is the disk signature as a GUID in string format (for example, "{7c69a706-eda5-11dd-bc09-001e4ce28b8f}"). If the PartitionStyle parameter is MBR, the DiskSignature parameter is the decimal MBR disk signature in string format (for example, "402653184" for 0x18000000).</param>
+    /// <param name="partitionIdentifer">If the PartitionStyle parameter is GPT, the PartitionIdentifier parameter is the partition signature as a GUID in string format (for example, "{6efb52bf-1766-41db-a6b3-0ee5eff72bd7}" ). If the PartitionStyle parameter is MBR, the PartitionIdentifier parameter is the decimal MBR partition offset in string format (for example, "82837504" for 0x4F00000).</param>
+    /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
+    public void SetQualifiedPartitionDeviceElement(BcdElementType type, PartitionStyle partitionStyle, string diskSignature, string partitionIdentifer) {
+        AdminCheck();
+
+        try {
+            ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
+            var inParam = classInstance.GetMethodParameters(nameof(SetQualifiedPartitionDeviceElement));
+            inParam["Type"] = type;
+            inParam["PartitionStyle"] = partitionStyle;
+            inParam["DiskSignature"] = diskSignature;
+            inParam["PartitionIdentifier"] = partitionIdentifer;
+
+            var outParam = classInstance.InvokeMethod(nameof(SetQualifiedPartitionDeviceElement), inParam, null);
+            ReturnValueCheck(outParam);
+        } catch (ManagementException err) {
+            throw new BcdException(err);
+        }
+    }
+
+    /// <summary>
     /// Sets the specified object element.
     /// </summary>
     /// <param name="type">The element type.</param>
