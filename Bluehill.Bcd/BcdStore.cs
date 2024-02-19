@@ -1,4 +1,5 @@
 ﻿using System.Management;
+using System.Runtime.CompilerServices;
 using static Bluehill.Bcd.Internal;
 
 namespace Bluehill.Bcd;
@@ -11,8 +12,12 @@ public sealed record class BcdStore {
     private const string pathEndString = "'";
     private static readonly ManagementObject staticInstance = new(ScopeString, pathStartString + pathEndString, null);
     private static readonly BcdStore systemStore = new(string.Empty);
+    private readonly ManagementObject classInstance;
 
-    internal BcdStore(string fp) => FilePath = fp;
+    internal BcdStore(string fp) {
+        FilePath = fp;
+        classInstance = new(ScopeString, $"{pathStartString}{fp}{pathEndString}", null);
+    }
 
     /// <summary>
     /// The system store.
@@ -111,11 +116,10 @@ public sealed record class BcdStore {
         AdminCheck();
 
         try {
-            ManagementObject classInstance = new(ScopeString, pathStartString + FilePath + pathEndString, null);
-            var inParam = classInstance.GetMethodParameters(nameof(OpenObject));
+            var inParam = getInParam();
             inParam["Id"] = id.ToString("B");
 
-            var outParam = classInstance.InvokeMethod(nameof(OpenObject), inParam, null);
+            var outParam = getOutParam(inParam);
             ReturnValueCheck(outParam);
 
             var bo = (ManagementBaseObject)outParam["Object"];
@@ -137,12 +141,11 @@ public sealed record class BcdStore {
         AdminCheck();
 
         try {
-            ManagementObject classInstance = new(ScopeString, pathStartString + FilePath + pathEndString, null);
-            var inParam = classInstance.GetMethodParameters(nameof(CreateObject));
+            var inParam = getInParam();
             inParam["Id"] = id.ToString("B");
             inParam["Type"] = type;
 
-            var outParam = classInstance.InvokeMethod(nameof(CreateObject), inParam, null);
+            var outParam = getOutParam(inParam);
             ReturnValueCheck(outParam);
 
             var bo = (ManagementBaseObject)outParam["Object"];
@@ -164,13 +167,12 @@ public sealed record class BcdStore {
         AdminCheck();
 
         try {
-            ManagementObject classInstance = new(ScopeString, pathStartString + FilePath + pathEndString, null);
-            var inParam = classInstance.GetMethodParameters(nameof(CopyObject));
+            var inParam = getInParam();
             inParam["SourceStoreFile"] = source.Store.FilePath;
             inParam["SourceId"] = source.Id.ToString("B");
             inParam["Flags"] = flags;
 
-            var outParam = classInstance.InvokeMethod(nameof(CopyObject), inParam, null);
+            var outParam = getOutParam(inParam);
             ReturnValueCheck(outParam);
 
             var bo = (ManagementBaseObject)outParam["Object"];
@@ -180,4 +182,7 @@ public sealed record class BcdStore {
             throw new BcdException(err);
         }
     }
+
+    private ManagementBaseObject getInParam([CallerMemberName] string? methodName = default) => classInstance.GetMethodParameters(methodName);
+    private ManagementBaseObject getOutParam(ManagementBaseObject inParam, [CallerMemberName] string? methodName = default) => classInstance.InvokeMethod(methodName, inParam, null);
 }
