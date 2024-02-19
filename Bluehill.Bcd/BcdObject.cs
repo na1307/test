@@ -342,6 +342,26 @@ public sealed record class BcdObject {
         }
     }
 
+    /// <summary>
+    /// Deletes the specified element.
+    /// </summary>
+    /// <param name="type">The element type.</param>
+    /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
+    public void DeleteElement(BcdElementType type) {
+        AdminCheck();
+
+        try {
+            ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
+            var inParam = classInstance.GetMethodParameters(nameof(DeleteElement));
+            inParam["Type"] = type;
+
+            var outParam = classInstance.InvokeMethod(nameof(DeleteElement), inParam, null);
+            ReturnValueCheck(outParam);
+        } catch (ManagementException err) {
+            throw new BcdException(err);
+        }
+    }
+
     private BcdDeviceData getDeviceData(ManagementBaseObject deviceData) {
         var type = (DeviceType)(uint)deviceData["DeviceType"];
         var addOptionsString = (string)deviceData["AdditionalOptions"];
