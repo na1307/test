@@ -9,9 +9,9 @@ namespace Bluehill.Bcd;
 /// Represents a BCD object that contains a collection of BCD elements. Each BCD object is identified by a GUID.
 /// </summary>
 public sealed record class BcdObject {
-    private const string PathStartString = "BcdObject.Id='";
-    private const string PathMiddleString = "',StoreFilePath='";
-    private const string PathEndString = "'";
+    private const string pathStartString = "BcdObject.Id='";
+    private const string pathMiddleString = "',StoreFilePath='";
+    private const string pathEndString = "'";
 
     internal BcdObject(BcdStore store, Guid id, BcdObjectType type) {
         Store = store;
@@ -35,6 +35,26 @@ public sealed record class BcdObject {
     public BcdObjectType Type { get; }
 
     /// <summary>
+    /// Enumerates the types of elements in the object.
+    /// </summary>
+    /// <returns>An array of element types.</returns>
+    /// <exception cref="BcdException">Error occurred during BCD wMI operation</exception>
+    public BcdElementType[] EnumerateElementTypes() {
+        AdminCheck();
+
+        try {
+            ManagementObject classInstance = new(ScopeString, pathStartString + Id.ToString("B") + pathMiddleString + Store.FilePath + pathEndString, null);
+            var inParam = classInstance.GetMethodParameters(nameof(EnumerateElementTypes));
+            var outParam = classInstance.InvokeMethod(nameof(EnumerateElementTypes), inParam, null);
+            ReturnValueCheck(outParam);
+
+            return ((uint[])outParam["Types"]).Select(i => (BcdElementType)i).ToArray();
+        } catch (ManagementException err) {
+            throw new BcdException(err);
+        }
+    }
+
+    /// <summary>
     /// Gets the specified element.
     /// </summary>
     /// <param name="type">The element type.</param>
@@ -44,7 +64,7 @@ public sealed record class BcdObject {
         AdminCheck();
 
         try {
-            ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
+            ManagementObject classInstance = new(ScopeString, pathStartString + Id.ToString("B") + pathMiddleString + Store.FilePath + pathEndString, null);
             var inParam = classInstance.GetMethodParameters(nameof(GetElement));
             inParam["Type"] = type;
 
@@ -92,7 +112,7 @@ public sealed record class BcdObject {
         AdminCheck();
 
         try {
-            ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
+            ManagementObject classInstance = new(ScopeString, pathStartString + Id.ToString("B") + pathMiddleString + Store.FilePath + pathEndString, null);
             var inParam = classInstance.GetMethodParameters(nameof(GetElementWithFlags));
             inParam["Type"] = type;
             inParam["Flags"] = flags;
@@ -163,7 +183,7 @@ public sealed record class BcdObject {
         AdminCheck();
 
         try {
-            ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
+            ManagementObject classInstance = new(ScopeString, pathStartString + Id.ToString("B") + pathMiddleString + Store.FilePath + pathEndString, null);
             var inParam = classInstance.GetMethodParameters(nameof(SetPartitionDeviceElement));
             inParam["Type"] = type;
             inParam["DeviceType"] = deviceType;
@@ -190,7 +210,7 @@ public sealed record class BcdObject {
         AdminCheck();
 
         try {
-            ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
+            ManagementObject classInstance = new(ScopeString, pathStartString + Id.ToString("B") + pathMiddleString + Store.FilePath + pathEndString, null);
             var inParam = classInstance.GetMethodParameters(nameof(SetPartitionDeviceElementWithFlags));
             inParam["Type"] = type;
             inParam["DeviceType"] = deviceType;
@@ -220,7 +240,7 @@ public sealed record class BcdObject {
         AdminCheck();
 
         try {
-            ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
+            ManagementObject classInstance = new(ScopeString, pathStartString + Id.ToString("B") + pathMiddleString + Store.FilePath + pathEndString, null);
             var inParam = classInstance.GetMethodParameters(nameof(SetFileDeviceElement));
             inParam["Type"] = type;
             inParam["DeviceType"] = deviceType;
@@ -251,7 +271,7 @@ public sealed record class BcdObject {
         AdminCheck();
 
         try {
-            ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
+            ManagementObject classInstance = new(ScopeString, pathStartString + Id.ToString("B") + pathMiddleString + Store.FilePath + pathEndString, null);
             var inParam = classInstance.GetMethodParameters(nameof(SetVhdDeviceElement));
             inParam["Type"] = type;
             inParam["Path"] = path;
@@ -279,7 +299,7 @@ public sealed record class BcdObject {
         AdminCheck();
 
         try {
-            ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
+            ManagementObject classInstance = new(ScopeString, pathStartString + Id.ToString("B") + pathMiddleString + Store.FilePath + pathEndString, null);
             var inParam = classInstance.GetMethodParameters(nameof(SetQualifiedPartitionDeviceElement));
             inParam["Type"] = type;
             inParam["PartitionStyle"] = partitionStyle;
@@ -303,7 +323,7 @@ public sealed record class BcdObject {
         AdminCheck();
 
         try {
-            ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
+            ManagementObject classInstance = new(ScopeString, pathStartString + Id.ToString("B") + pathMiddleString + Store.FilePath + pathEndString, null);
             var inParam = classInstance.GetMethodParameters(nameof(SetObjectElement));
             inParam["Type"] = type;
             inParam["Id"] = @object.Id.ToString("B");
@@ -330,7 +350,7 @@ public sealed record class BcdObject {
         AdminCheck();
 
         try {
-            ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
+            ManagementObject classInstance = new(ScopeString, pathStartString + Id.ToString("B") + pathMiddleString + Store.FilePath + pathEndString, null);
             var inParam = classInstance.GetMethodParameters(nameof(SetObjectListElement));
             inParam["Type"] = type;
             inParam["Ids"] = objects.Select(o => o.Id.ToString("B")).ToArray();
@@ -351,7 +371,7 @@ public sealed record class BcdObject {
         AdminCheck();
 
         try {
-            ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
+            ManagementObject classInstance = new(ScopeString, pathStartString + Id.ToString("B") + pathMiddleString + Store.FilePath + pathEndString, null);
             var inParam = classInstance.GetMethodParameters(nameof(DeleteElement));
             inParam["Type"] = type;
 
@@ -402,7 +422,7 @@ public sealed record class BcdObject {
         AdminCheck();
 
         try {
-            ManagementObject classInstance = new(ScopeString, PathStartString + Id.ToString("B") + PathMiddleString + Store.FilePath + PathEndString, null);
+            ManagementObject classInstance = new(ScopeString, pathStartString + Id.ToString("B") + pathMiddleString + Store.FilePath + pathEndString, null);
             var inParam = classInstance.GetMethodParameters(methodName);
             inParam["Type"] = type;
             inParam[paramName] = value;

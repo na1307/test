@@ -7,9 +7,9 @@ namespace Bluehill.Bcd;
 /// Represents a BCD store that contains a collection of BCD objects.
 /// </summary>
 public sealed record class BcdStore {
-    private const string PathStartString = "BcdStore.FilePath='";
-    private const string PathEndString = "'";
-    private static readonly ManagementObject staticInstance = new(ScopeString, PathStartString + PathEndString, null);
+    private const string pathStartString = "BcdStore.FilePath='";
+    private const string pathEndString = "'";
+    private static readonly ManagementObject staticInstance = new(ScopeString, pathStartString + pathEndString, null);
     private static readonly BcdStore systemStore = new(string.Empty);
 
     internal BcdStore(string fp) => FilePath = fp;
@@ -111,7 +111,7 @@ public sealed record class BcdStore {
         AdminCheck();
 
         try {
-            ManagementObject classInstance = new(ScopeString, PathStartString + FilePath + PathEndString, null);
+            ManagementObject classInstance = new(ScopeString, pathStartString + FilePath + pathEndString, null);
             var inParam = classInstance.GetMethodParameters(nameof(OpenObject));
             inParam["Id"] = id.ToString("B");
 
@@ -137,7 +137,7 @@ public sealed record class BcdStore {
         AdminCheck();
 
         try {
-            ManagementObject classInstance = new(ScopeString, PathStartString + FilePath + PathEndString, null);
+            ManagementObject classInstance = new(ScopeString, pathStartString + FilePath + pathEndString, null);
             var inParam = classInstance.GetMethodParameters(nameof(CreateObject));
             inParam["Id"] = id.ToString("B");
             inParam["Type"] = type;
@@ -164,7 +164,7 @@ public sealed record class BcdStore {
         AdminCheck();
 
         try {
-            ManagementObject classInstance = new(ScopeString, PathStartString + FilePath + PathEndString, null);
+            ManagementObject classInstance = new(ScopeString, pathStartString + FilePath + pathEndString, null);
             var inParam = classInstance.GetMethodParameters(nameof(CopyObject));
             inParam["SourceStoreFile"] = source.Store.FilePath;
             inParam["SourceId"] = source.Id.ToString("B");
