@@ -258,6 +258,9 @@ public sealed record class BcdObject {
                 case nameof(BcdDeviceLocateElementChildData):
                     return new BcdDeviceLocateElementChildData(type, addOptions, (LocateDeviceType)(uint)deviceData["Type"], (int)(uint)deviceData["Element"], getDeviceData((ManagementBaseObject)deviceData["Parent"]));
 
+                case nameof(BcdDeviceUnknownData):
+                    return new BcdDeviceUnknownData(type, addOptions, (byte[])deviceData["Data"]);
+
                 case nameof(BcdDeviceData) or nameof(BcdDeviceLocateData):
                     break;
 
