@@ -6,7 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Using Include="Xunit" />
-    <Using Include="Bluehill.Bcd.Test.Constants" Static="true" />
+    <Using Include="Bluehill.Bcd.Tests.Constants" Static="true" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Management" />

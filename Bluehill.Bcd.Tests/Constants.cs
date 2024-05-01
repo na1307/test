@@ -1,4 +1,4 @@
-﻿namespace Bluehill.Bcd.Test;
+﻿namespace Bluehill.Bcd.Tests;
 
 public static class Constants {
     public const string NonAdminUsername = "foo";

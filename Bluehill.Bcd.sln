@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bluehill.Bcd", "Bluehill.Bcd\Bluehill.Bcd.csproj", "{3D705A94-42A9-4B5F-AC48-86C5410BAAF8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bluehill.Bcd.Test", "Bluehill.Bcd.Test\Bluehill.Bcd.Test.csproj", "{FCCC2F8C-7A7A-4940-88D1-D7BB68CF8201}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bluehill.Bcd.Tests", "Bluehill.Bcd.Tests\Bluehill.Bcd.Tests.csproj", "{FCCC2F8C-7A7A-4940-88D1-D7BB68CF8201}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

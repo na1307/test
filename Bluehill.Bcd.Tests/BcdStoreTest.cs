@@ -1,6 +1,6 @@
 using Xunit.UserContext;
 
-namespace Bluehill.Bcd.Test;
+namespace Bluehill.Bcd.Tests;
 
 public class BcdStoreTest {
     [Fact]
