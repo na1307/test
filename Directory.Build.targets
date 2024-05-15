@@ -2,6 +2,8 @@
   <PropertyGroup Condition="'$(GeneratePackageOnBuild)' == 'true'">
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <EnablePackageValidation>true</EnablePackageValidation>
   </PropertyGroup>
   <ItemGroup Condition="'$(UseWindowsForms)' == 'true' and '$(TargetFramework)' == 'net20'">
     <Reference Include="System.Windows.Forms" />
