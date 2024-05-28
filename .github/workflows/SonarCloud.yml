@@ -24,8 +24,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-      - name: Create user for test
-        run: net user foo 1q@ /add
       - name: Cache NuGet
         uses: actions/cache@v4
         with:
