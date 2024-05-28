@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GpgStarter", "GpgStarter.csproj", "{1184F8BB-B143-4071-93B4-3121C5BFA2E2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM64 = Debug|ARM64
+		Debug|x64 = Debug|x64
+		Release|ARM64 = Release|ARM64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1184F8BB-B143-4071-93B4-3121C5BFA2E2}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{1184F8BB-B143-4071-93B4-3121C5BFA2E2}.Debug|ARM64.Build.0 = Debug|ARM64
+		{1184F8BB-B143-4071-93B4-3121C5BFA2E2}.Debug|x64.ActiveCfg = Debug|x64
+		{1184F8BB-B143-4071-93B4-3121C5BFA2E2}.Debug|x64.Build.0 = Debug|x64
+		{1184F8BB-B143-4071-93B4-3121C5BFA2E2}.Release|ARM64.ActiveCfg = Release|ARM64
+		{1184F8BB-B143-4071-93B4-3121C5BFA2E2}.Release|ARM64.Build.0 = Release|ARM64
+		{1184F8BB-B143-4071-93B4-3121C5BFA2E2}.Release|x64.ActiveCfg = Release|x64
+		{1184F8BB-B143-4071-93B4-3121C5BFA2E2}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1C487384-9AAC-4A96-B379-6B98AA3722BC}
+	EndGlobalSection
+EndGlobal
