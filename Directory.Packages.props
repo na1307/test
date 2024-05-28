@@ -3,6 +3,7 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="LinqBridge" Version="1.3.0" />
     <PackageVersion Include="System.Management" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>

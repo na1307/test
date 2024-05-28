@@ -89,7 +89,7 @@ public sealed record class BcdObject : IDisposable {
             return getElement((ManagementBaseObject)outParam["Element"]);
         } catch (ManagementException err) {
             throw new BcdException(err);
-        } catch (COMException cex) when (cex.HResult == -805305819) {
+        } catch (COMException cex) when (cex.GetHResult() == -805305819) {
             throw new BcdException("Element not found.", cex);
         }
     }
@@ -120,10 +120,10 @@ public sealed record class BcdObject : IDisposable {
                         return getDeviceData((ManagementBaseObject)property.Value);
 
                     case "Id":
-                        return Store.OpenObject(Guid.Parse((string)property.Value));
+                        return Store.OpenObject(new Guid((string)property.Value));
 
                     case "Ids":
-                        return ((string[])property.Value).Select(s => Store.OpenObject(Guid.Parse(s))).ToArray();
+                        return ((string[])property.Value).Select(s => Store.OpenObject(new Guid(s))).ToArray();
 
                     case "StoreFilePath" or "ObjectId" or "Type":
                         break;
@@ -136,7 +136,7 @@ public sealed record class BcdObject : IDisposable {
             throw new BcdException("Unknown1");
         } catch (ManagementException err) {
             throw new BcdException(err);
-        } catch (COMException cex) when (cex.HResult == -805305819) {
+        } catch (COMException cex) when (cex.GetHResult() == -805305819) {
             throw new BcdException("Element not found.", cex);
         }
     }
@@ -363,6 +363,15 @@ public sealed record class BcdObject : IDisposable {
         GC.SuppressFinalize(this);
     }
 
+    /// <inheritdoc/>
+    public bool Equals(BcdObject? other) => ReferenceEquals(this, other) || (other is not null && Store == other.Store && Id == other.Id && Type == other.Type);
+
+    /// <summary>
+    /// Returns the hash code of this object.
+    /// </summary>
+    /// <returns>The hash code of this object.</returns>
+    public override int GetHashCode() => Store.GetHashCode() + Id.GetHashCode() + Type.GetHashCode();
+
     private void Dispose(bool disposing) {
         if (!disposedValue) {
             if (disposing) {
@@ -399,10 +408,10 @@ public sealed record class BcdObject : IDisposable {
                     return getDeviceData((ManagementBaseObject)property.Value);
 
                 case "Id":
-                    return Store.OpenObject(Guid.Parse((string)property.Value));
+                    return Store.OpenObject(new Guid((string)property.Value));
 
                 case "Ids":
-                    return ((string[])property.Value).Select(s => Store.OpenObject(Guid.Parse(s))).ToArray();
+                    return ((string[])property.Value).Select(s => Store.OpenObject(new Guid(s))).ToArray();
 
                 case "StoreFilePath" or "ObjectId" or "Type":
                     break;
@@ -418,7 +427,7 @@ public sealed record class BcdObject : IDisposable {
     private BcdDeviceData getDeviceData(ManagementBaseObject deviceData) {
         var type = (DeviceType)(uint)deviceData["DeviceType"];
         var addOptionsString = (string)deviceData["AdditionalOptions"];
-        var addOptions = string.IsNullOrEmpty(addOptionsString) ? null : Store.OpenObject(Guid.Parse(addOptionsString));
+        var addOptions = string.IsNullOrEmpty(addOptionsString) ? null : Store.OpenObject(new Guid(addOptionsString));
 
         foreach (var property in deviceData.Properties) {
             switch (property.Origin) {

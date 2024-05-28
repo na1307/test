@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net45;net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net20;net35;net45;net6.0-windows</TargetFrameworks>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Description>BCD WMI Provider for .NET</Description>
@@ -11,6 +11,10 @@
     <AssemblyOriginatorKeyFile>..\bluehill.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Using Remove="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="LinqBridge" Condition="'$(TargetFramework)' == 'net20'" />
     <PackageReference Include="System.Management" Condition="$(DefineConstants.Contains(NETCOREAPP))" />
   </ItemGroup>
   <ItemGroup>

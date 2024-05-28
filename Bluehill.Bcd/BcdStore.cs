@@ -119,7 +119,7 @@ public sealed record class BcdStore : IDisposable {
             var outParam = getOutParam(inParam);
             var bo = (ManagementBaseObject)outParam["Object"];
 
-            return new(this, Guid.Parse((string)bo["id"]), (BcdObjectType)(uint)bo["Type"]);
+            return new(this, new Guid((string)bo["id"]), (BcdObjectType)(uint)bo["Type"]);
         } catch (ManagementException err) {
             throw new BcdException(err);
         }
@@ -143,7 +143,7 @@ public sealed record class BcdStore : IDisposable {
             var outParam = getOutParam(inParam);
             var bo = (ManagementBaseObject)outParam["Object"];
 
-            return new(this, Guid.Parse((string)bo["Id"]), (BcdObjectType)(uint)bo["Type"]);
+            return new(this, new Guid((string)bo["Id"]), (BcdObjectType)(uint)bo["Type"]);
         } catch (ManagementException err) {
             throw new BcdException(err);
         }
@@ -168,7 +168,7 @@ public sealed record class BcdStore : IDisposable {
             var outParam = getOutParam(inParam);
             var bo = (ManagementBaseObject)outParam["Object"];
 
-            return new(this, Guid.Parse((string)bo["Id"]), (BcdObjectType)(uint)bo["Type"]);
+            return new(this, new Guid((string)bo["Id"]), (BcdObjectType)(uint)bo["Type"]);
         } catch (ManagementException err) {
             throw new BcdException(err);
         }
@@ -183,6 +183,15 @@ public sealed record class BcdStore : IDisposable {
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
+
+    /// <inheritdoc/>
+    public bool Equals(BcdStore? other) => ReferenceEquals(this, other) || (other is not null && FilePath == other.FilePath);
+
+    /// <summary>
+    /// Returns the hash code of this object.
+    /// </summary>
+    /// <returns>The hash code of this object.</returns>
+    public override int GetHashCode() => FilePath.GetHashCode();
 
     private void Dispose(bool disposing) {
         if (!disposedValue) {
