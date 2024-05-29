@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Product>Bluehill.Bcd</Product>
     <PackageProjectUrl>https://na1307.github.io/Bluehill.Bcd</PackageProjectUrl>
-    <PackageTags>bcd;na1307;bluehill</PackageTags>
+    <PackageTags>bcd;bcdedit;na1307;bluehill</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>https://na1307.github.io/Bluehill.Bcd/CHANGELOG.html</PackageReleaseNotes>

@@ -44,7 +44,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ github.event.repository.name }}.nupkg
-        path: ${{ env.OUTPUT_PATH }}/*.nupkg
+        path: ${{ env.OUTPUT_PATH }}/*.*nupkg
 
   publish:
     name: Publish to NuGet
