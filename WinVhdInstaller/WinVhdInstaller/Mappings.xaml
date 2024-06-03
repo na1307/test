@@ -1,0 +1,32 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:dataContext="clr-namespace:WinVhdInstaller.ViewModels"
+                    xmlns:dataContextW="clr-namespace:WinVhdInstaller.ViewModels.Wizards"
+                    xmlns:views="clr-namespace:WinVhdInstaller.Views"
+                    xmlns:viewsW="clr-namespace:WinVhdInstaller.Views.Wizards">
+
+    <!-- Welcome page -->
+    <DataTemplate DataType="{x:Type dataContextW:WelcomeViewModel}">
+        <viewsW:WelcomePage />
+    </DataTemplate>
+
+    <!-- install.wim page -->
+    <DataTemplate DataType="{x:Type dataContextW:InstallWimViewModel}">
+        <viewsW:InstallWimPage />
+    </DataTemplate>
+
+    <!-- VHD page -->
+    <DataTemplate DataType="{x:Type dataContextW:VhdPageViewModel}">
+        <viewsW:VhdPage />
+    </DataTemplate>
+
+    <!-- Check page -->
+    <DataTemplate DataType="{x:Type dataContextW:CheckViewModel}">
+        <viewsW:CheckPage />
+    </DataTemplate>
+
+    <!-- Progress page -->
+    <DataTemplate DataType="{x:Type dataContextW:ProgressModel}">
+        <viewsW:ProgressPage />
+    </DataTemplate>
+</ResourceDictionary>
