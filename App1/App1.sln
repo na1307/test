@@ -5,34 +5,22 @@ VisualStudioVersion = 17.9.34902.65
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App1", "App1\App1.csproj", "{B5AF75A3-F423-4B3E-9B5F-094FE746D67D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App2", "App2\App2.csproj", "{74F97973-3174-4A95-8B23-17EFBB3EE70E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|ARM64 = Debug|ARM64
 		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
-		Release|ARM64 = Release|ARM64
 		Release|x64 = Release|x64
-		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B5AF75A3-F423-4B3E-9B5F-094FE746D67D}.Debug|ARM64.ActiveCfg = Debug|ARM64
-		{B5AF75A3-F423-4B3E-9B5F-094FE746D67D}.Debug|ARM64.Build.0 = Debug|ARM64
-		{B5AF75A3-F423-4B3E-9B5F-094FE746D67D}.Debug|ARM64.Deploy.0 = Debug|ARM64
 		{B5AF75A3-F423-4B3E-9B5F-094FE746D67D}.Debug|x64.ActiveCfg = Debug|x64
 		{B5AF75A3-F423-4B3E-9B5F-094FE746D67D}.Debug|x64.Build.0 = Debug|x64
-		{B5AF75A3-F423-4B3E-9B5F-094FE746D67D}.Debug|x64.Deploy.0 = Debug|x64
-		{B5AF75A3-F423-4B3E-9B5F-094FE746D67D}.Debug|x86.ActiveCfg = Debug|x86
-		{B5AF75A3-F423-4B3E-9B5F-094FE746D67D}.Debug|x86.Build.0 = Debug|x86
-		{B5AF75A3-F423-4B3E-9B5F-094FE746D67D}.Debug|x86.Deploy.0 = Debug|x86
-		{B5AF75A3-F423-4B3E-9B5F-094FE746D67D}.Release|ARM64.ActiveCfg = Release|ARM64
-		{B5AF75A3-F423-4B3E-9B5F-094FE746D67D}.Release|ARM64.Build.0 = Release|ARM64
-		{B5AF75A3-F423-4B3E-9B5F-094FE746D67D}.Release|ARM64.Deploy.0 = Release|ARM64
 		{B5AF75A3-F423-4B3E-9B5F-094FE746D67D}.Release|x64.ActiveCfg = Release|x64
 		{B5AF75A3-F423-4B3E-9B5F-094FE746D67D}.Release|x64.Build.0 = Release|x64
-		{B5AF75A3-F423-4B3E-9B5F-094FE746D67D}.Release|x64.Deploy.0 = Release|x64
-		{B5AF75A3-F423-4B3E-9B5F-094FE746D67D}.Release|x86.ActiveCfg = Release|x86
-		{B5AF75A3-F423-4B3E-9B5F-094FE746D67D}.Release|x86.Build.0 = Release|x86
-		{B5AF75A3-F423-4B3E-9B5F-094FE746D67D}.Release|x86.Deploy.0 = Release|x86
+		{74F97973-3174-4A95-8B23-17EFBB3EE70E}.Debug|x64.ActiveCfg = Debug|x64
+		{74F97973-3174-4A95-8B23-17EFBB3EE70E}.Debug|x64.Build.0 = Debug|x64
+		{74F97973-3174-4A95-8B23-17EFBB3EE70E}.Release|x64.ActiveCfg = Release|x64
+		{74F97973-3174-4A95-8B23-17EFBB3EE70E}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
