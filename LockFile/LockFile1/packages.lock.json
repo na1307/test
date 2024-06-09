@@ -7,12 +7,6 @@
         "requested": "[1.0.4, )",
         "resolved": "1.0.4",
         "contentHash": "ZK7dug1YciPbkijbGspuEUQiSDPY7Csqgp59BBOvjcjVDr/VRXbwSipxoUnVlECz1LPU8M+X3Z6CCwBqDlS72w=="
-      },
-      "Newtonsoft.Json": {
-        "type": "Direct",
-        "requested": "[13.0.1, )",
-        "resolved": "13.0.1",
-        "contentHash": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A=="
       }
     }
   }
