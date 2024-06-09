@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LockFile1", "LockFile1\LockFile1.csproj", "{6155D1F3-7425-4F5B-AE8F-9F4CD6140222}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LockFile2", "LockFile2\LockFile2.csproj", "{380AFF8B-F413-44E1-BC96-0DECC30ABB55}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{6155D1F3-7425-4F5B-AE8F-9F4CD6140222}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6155D1F3-7425-4F5B-AE8F-9F4CD6140222}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6155D1F3-7425-4F5B-AE8F-9F4CD6140222}.Release|Any CPU.Build.0 = Release|Any CPU
+		{380AFF8B-F413-44E1-BC96-0DECC30ABB55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{380AFF8B-F413-44E1-BC96-0DECC30ABB55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{380AFF8B-F413-44E1-BC96-0DECC30ABB55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{380AFF8B-F413-44E1-BC96-0DECC30ABB55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
