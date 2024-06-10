@@ -32,7 +32,7 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - name: Prepare Blazor WASM for GitHub Pages
-        uses: na1307/v2test@main
+        uses: na1307/blazor-github-pages@v1
         id: prepare
         with:
           project-path: BlazorTest/BlazorTest.csproj
