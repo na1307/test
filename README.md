@@ -1,2 +1,2 @@
 # Project Babylon
-A Desktop search engine for Linux, built on [Avalonia](https://avaloniaui.net).
+An Application launcher / File finder for Linux, built on [Avalonia](https://avaloniaui.net).

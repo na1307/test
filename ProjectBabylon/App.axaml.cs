@@ -1,8 +1,6 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
-using System.Linq;
 using Avalonia.Markup.Xaml;
 using ProjectBabylon.ViewModels;
 using ProjectBabylon.Views;
@@ -10,6 +8,8 @@ using ProjectBabylon.Views;
 namespace ProjectBabylon;
 
 public sealed partial class App : Application {
+    public static new App Current => (App)Application.Current!;
+
     public override void Initialize() => AvaloniaXamlLoader.Load(this);
 
     public override void OnFrameworkInitializationCompleted() {
