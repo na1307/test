@@ -36,4 +36,10 @@ public sealed partial class App : Application {
             BindingPlugins.DataValidators.Remove(plugin);
         }
     }
+
+    private void ShowMenuItem_OnClick(object? sender, EventArgs e) =>
+        ((IClassicDesktopStyleApplicationLifetime)Current.ApplicationLifetime!).MainWindow!.Show();
+
+    private void ExitMenuItem_OnClick(object? sender, EventArgs e) =>
+        ((IClassicDesktopStyleApplicationLifetime)Current.ApplicationLifetime!).Shutdown();
 }

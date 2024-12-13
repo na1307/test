@@ -5,5 +5,5 @@ namespace ProjectBabylon.ViewModels;
 
 public sealed partial class MainWindowViewModel : ViewModelBase {
     [RelayCommand]
-    private void Esc() => ((IClassicDesktopStyleApplicationLifetime)App.Current.ApplicationLifetime!).MainWindow!.Close();
+    private void Esc() => ((IClassicDesktopStyleApplicationLifetime)App.Current.ApplicationLifetime!).MainWindow!.Hide();
 }

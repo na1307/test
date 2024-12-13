@@ -11,7 +11,8 @@
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
-        SystemDecorations="BorderOnly">
+        SystemDecorations="BorderOnly"
+        Closing="Window_OnClosing">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
