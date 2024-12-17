@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "dependencies": {
+    "net9.0": {
+      "Bluehill.Imports": {
+        "type": "Direct",
+        "requested": "[1.0.7, )",
+        "resolved": "1.0.7",
+        "contentHash": "s5zFMjig8Qx23oWJW2dXMAT25iqOZHiew/GQ1YcNEdvZiH2CIXFSn4og7/psvORS1aZ12/NsWhM2hozJgMpoIw==",
+        "dependencies": {
+          "Bluehill.Analyzers": "1.0.0",
+          "Roslynator.Analyzers": "4.12.9",
+          "Roslynator.Formatting.Analyzers": "4.12.9",
+          "SonarAnalyzer.CSharp": "10.3.0.106239"
+        }
+      },
+      "Bluehill.Analyzers": {
+        "type": "Transitive",
+        "resolved": "1.0.0",
+        "contentHash": "Bf6ZUY8D0QacpUtcJsLjahvyetjfBljSPTTrIS60sXs4UHQia5alHr6jAt2pf7xKDst40vo8+htiLE4NzLvkrg=="
+      },
+      "Roslynator.Analyzers": {
+        "type": "Transitive",
+        "resolved": "4.12.9",
+        "contentHash": "X6lDpN/D5wuinq37KIx+l3GSUe9No+8bCjGBTI5sEEtxapLztkHg6gzNVhMXpXw8P+/5gFYxTXJ5Pf8O4iNz/w=="
+      },
+      "Roslynator.Formatting.Analyzers": {
+        "type": "Transitive",
+        "resolved": "4.12.9",
+        "contentHash": "DOS/WK8xLvqPgD/SDVHQ6vI4T5uhDQftPuCXP1jB0TztzPrlblNud1F+9GhjzPIQrxxzkBmG65rihNErp2WVhg=="
+      },
+      "SonarAnalyzer.CSharp": {
+        "type": "Transitive",
+        "resolved": "10.3.0.106239",
+        "contentHash": "Ne5QHx0nUULk7PF+3GIQIC2EnFI93SPRilyqVY6US4JolZOCc9XyUKzvOVsufp7cyrqbOTL07U5mb6poYzllNQ=="
+      }
+    }
+  }
+}
