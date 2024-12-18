@@ -4,6 +4,8 @@ using Tizen.Applications;
 namespace SampleTVApp;
 
 internal sealed class App : CoreUIApplication {
+    private int clickCount;
+
     protected override void OnCreate() {
         base.OnCreate();
         Initialize();
@@ -13,9 +15,7 @@ internal sealed class App : CoreUIApplication {
         Window window = new("SampleTVApp") {
             AvailableRotations = DisplayRotation.Degree_0
         };
-        window.BackButtonPressed += (s, e) => {
-            Exit();
-        };
+        window.BackButtonPressed += (s, e) => Exit();
         window.Show();
 
         Box box = new(window) {
@@ -59,12 +59,40 @@ internal sealed class App : CoreUIApplication {
 
         button.Show();
         box.PackEnd(button);
+
+        Button count = new(window) {
+            Text = "Count: 0",
+            MinimumWidth = 300,
+            Color = Color.Lime
+        };
+
+        count.Clicked += (s, e) => {
+            clickCount++;
+            count.Text = $"Count: {clickCount}";
+        };
+
+        count.Show();
+        box.PackEnd(count);
+
+        Button reset = new(window) {
+            Text = "Reset",
+            MinimumWidth = 150,
+            Color = Color.Red
+        };
+
+        reset.Clicked += (s, e) => {
+            clickCount = 0;
+            count.Text = "Count: 0";
+        };
+
+        reset.Show();
+        box.PackEnd(reset);
     }
 
     private static void Main(string[] args) {
         Elementary.Initialize();
         Elementary.ThemeOverlay();
-        App app = new();
+        using App app = new();
         app.Run(args);
     }
 }
