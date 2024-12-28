@@ -1,0 +1,14 @@
+<Project>
+  <PropertyGroup>
+    <Product>Bluehill.Vhd</Product>
+    <PackageProjectUrl>https://na1307.github.io/Bluehill.Vhd</PackageProjectUrl>
+    <PackageTags>vhd;vhdx;na1307;bluehill</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>https://na1307.github.io/Bluehill.Vhd/CHANGELOG.html</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/na1307/Bluehill.Vhd</RepositoryUrl>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+</Project>
