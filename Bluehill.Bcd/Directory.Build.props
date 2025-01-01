@@ -1,0 +1,14 @@
+<Project>
+  <PropertyGroup>
+    <Product>Bluehill.Bcd</Product>
+    <PackageProjectUrl>https://na1307.github.io/Bluehill.Bcd</PackageProjectUrl>
+    <PackageTags>bcd;bcdedit;na1307;bluehill</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>https://na1307.github.io/Bluehill.Bcd/CHANGELOG.html</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/na1307/Bluehill.Bcd</RepositoryUrl>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+</Project>
