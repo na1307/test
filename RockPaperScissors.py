@@ -1,53 +1,72 @@
-from random import randrange as ranr
+"""
+이 코드는 가위바위보 게임을 구현한 코드입니다.
 
-ONLY1TO3 = '\n1부터 3까지의 숫자를 입력하세요\n'
+이 코드는 Windows 콘솔 창 호스트(conhost.exe)가 아닌, Windows Terminal, WSL, Linux, macOS, 그리고 다른 터미널 환경에서 실행해야 색상이 제대로 출력됩니다.
+"""
+from enum import IntEnum, auto
+from random import randint
 
-class NotInRange(Exception):
-    def __init__(self): super().__init__(ONLY1TO3)
+VALUE_MESSAGE = "1, 2, 3 또는 가위, 바위, 보 중 하나를 입력해주세요."
 
-def toGBB(inputnum: int):
-    if inputnum not in range(1, 4): raise NotInRange
+class GBB(IntEnum):
+    가위 = auto()
+    바위 = auto()
+    보 = auto()
 
-    return { 1: "가위", 2: "바위", 3: "보" }.get(inputnum)
 
-def main():
+WIN_RULES = {
+    GBB.가위: GBB.보,
+    GBB.바위: GBB.가위,
+    GBB.보: GBB.바위
+}
+
+
+def toColored(value: GBB) -> str:
+    if value == GBB.가위:
+        return "\033[91m가위\033[0m"
+    elif value == GBB.바위:
+        return "\033[92m바위\033[0m"
+    elif value == GBB.보:
+        return "\033[94m보\033[0m"
+    else:
+        raise ValueError("Invalid value.")
+
+def main() -> None:
+    wins, losses, draws = 0, 0, 0
+
     while True:
+        totalGames = wins + losses + draws
+
         print("가위 바위 보\n")
+        print(f"현재 {wins}승 {losses}패 {draws}무 (총 {totalGames}판{f", 승률 {round((wins / totalGames) * 100)}%" if totalGames > 0 else ""})\n")
+        print("\033[91m1. 가위\n\033[92m2. 바위\n\033[94m3. 보\n\n\033[0m0. 끝내기\n")
+        print(VALUE_MESSAGE)
 
-        print("1. 가위")
-        print("2. 바위")
-        print("3. 보")
+        yourChoiceStr = input("\n당신의 선택은? : ")
 
-        print()
-        print("0. 끝내기")
-
-        try:
-            yourChoice = int(input("\n당신의 선택은? : "))
-            if yourChoice == 0: break
-            computersChoice = ranr(1,4)
-
-            print("\n당신 " + toGBB(yourChoice) + " / " + toGBB(computersChoice) + " 컴퓨터\n")
-
-            if yourChoice == computersChoice:
-                print("비겼습니다!")
-            elif yourChoice == 1 and computersChoice == 3:
-                print("당신이 이겼습니다!")
-            elif yourChoice == 3 and computersChoice == 1:
-                print("컴퓨터가 이겼습니다!")
-            elif yourChoice > computersChoice:
-                print("당신이 이겼습니다!")
-            else:
-                print("컴퓨터가 이겼습니다!")
-
-            print()
-        except NotInRange as e:
-            print(e)
+        if yourChoiceStr == "0":
+            break
+        elif yourChoiceStr in ["1", "2", "3"]:
+            yourChoice = GBB(int(yourChoiceStr))
+        elif yourChoiceStr in ["가위", "바위", "보"]:
+            yourChoice = GBB[yourChoiceStr]
+        else:
+            print(f"\n{VALUE_MESSAGE}\n")
             continue
-        except ValueError:
-            print(ONLY1TO3)
-            continue
-        except Exception as e2:
-            raise e2
+
+        computersChoice = GBB(randint(1, 3))
+
+        print(f"\n당신 {toColored(yourChoice)} / {toColored(computersChoice)} 컴퓨터\n")
+
+        if yourChoice == computersChoice:
+            print("비겼습니다!\n")
+            draws += 1
+        elif WIN_RULES[yourChoice] == computersChoice:
+            print("당신이 이겼습니다!\n")
+            wins += 1
+        else:
+            print("컴퓨터가 이겼습니다!\n")
+            losses += 1
 
 if __name__ == "__main__":
     main()
