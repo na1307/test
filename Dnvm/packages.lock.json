@@ -1,0 +1,61 @@
+{
+  "version": 2,
+  "dependencies": {
+    "net9.0": {
+      "Bluehill.Imports": {
+        "type": "Direct",
+        "requested": "[1.0.9, )",
+        "resolved": "1.0.9",
+        "contentHash": "r3ePwQMhwbAPM86ScTTcSZ2bq/DM8MkCnyYEY0biz5CXB5Enu/Mmf5hVZMd+/lZeOwPFQq3hNAm/dg0bDFpHmA==",
+        "dependencies": {
+          "Bluehill.Analyzers": "1.2.0",
+          "Roslynator.Analyzers": "4.12.10",
+          "Roslynator.Formatting.Analyzers": "4.12.10"
+        }
+      },
+      "Microsoft.DotNet.ILCompiler": {
+        "type": "Direct",
+        "requested": "[9.0.0, )",
+        "resolved": "9.0.0",
+        "contentHash": "bbnlV2PbUmCQ8Ndpx0kJaicLyV28IU+4IzyctQLL57+DxrHurYr2qsJrC8+yD44Q0DyPfv2oM168c1Tk6Bxbmg=="
+      },
+      "Microsoft.NET.ILLink.Tasks": {
+        "type": "Direct",
+        "requested": "[9.0.0, )",
+        "resolved": "9.0.0",
+        "contentHash": "zAwp213evC3UkimtVXRb+Dlgc/40QG145nmZDtp2LO9zJJMfrp+i/87BnXN7tRXEA4liyzdFkjqG1HE8/RPb4A=="
+      },
+      "Bluehill.Analyzers": {
+        "type": "Transitive",
+        "resolved": "1.2.0",
+        "contentHash": "vsLjAh+2Fv7Yij7sqFvkFxf5lRv4R+FqbRIl8CGCiNSzxFywisYIeueJiQp5wp7nvYunJy9bJ0YS0EH6PbEKJQ=="
+      },
+      "Roslynator.Analyzers": {
+        "type": "Transitive",
+        "resolved": "4.12.10",
+        "contentHash": "Wecq3nfhTvnJPxX87hKbjMdX1xeCAMJf9rdBX3nQLTntQs9v0fFbUB2eQSSOArXMuFh7MxjLWaL4+b6XMi1NDA=="
+      },
+      "Roslynator.Formatting.Analyzers": {
+        "type": "Transitive",
+        "resolved": "4.12.10",
+        "contentHash": "Yz0OhQtuECTPBMoURxcv1XKgquVpUcUOpRGac8tormJSJzbMYK8qvVSvjIvQkQOrfYPLFa8aak5200BEAq/X9Q=="
+      }
+    },
+    "net9.0/linux-x64": {
+      "Microsoft.DotNet.ILCompiler": {
+        "type": "Direct",
+        "requested": "[9.0.0, )",
+        "resolved": "9.0.0",
+        "contentHash": "bbnlV2PbUmCQ8Ndpx0kJaicLyV28IU+4IzyctQLL57+DxrHurYr2qsJrC8+yD44Q0DyPfv2oM168c1Tk6Bxbmg==",
+        "dependencies": {
+          "runtime.linux-x64.Microsoft.DotNet.ILCompiler": "9.0.0"
+        }
+      },
+      "runtime.linux-x64.Microsoft.DotNet.ILCompiler": {
+        "type": "Transitive",
+        "resolved": "9.0.0",
+        "contentHash": "0cvsKduTGVQ4E0pn3JKFFk5FcEmhNl2evCS3r9ShB5rYZrnDSBxTgd1NBlhI4M/1iG140JFxtkal7KPnLLbwPQ=="
+      }
+    }
+  }
+}

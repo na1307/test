@@ -1,0 +1,22 @@
+#!/usr/bin/bash
+
+echo This is another dnvm.
+
+dnvmPath=~/.dnvm
+instancesName=instances
+
+listCommand() {
+    cd $dnvmPath/$instancesName
+    installed=($(ls -d *))
+
+    for install in ${installed[@]}; do
+        echo "$install [$dnvmPath/$instancesName/$install]"
+    done
+}
+
+installCommand() {
+    dryRun=$($dnvmPath/dotnet-install.sh --channel $1 --install-dir $dnvmPath/$instancesName/$1 --quality ga --dry-run)
+    versionNumber=$(echo $dryRun | grep 'Repeatable invocation' | sed -n 's/.*--version "\([0-9.]*\)".*/\1/p')
+    $dnvmPath/dotnet-install.sh --channel $1 --install-dir $dnvmPath/$instancesName/$versionNumber --quality ga
+    echo "Installation Completed."
+}
