@@ -10,6 +10,6 @@
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="5.7.1" />
   </ItemGroup>
   <ItemGroup>
-    <GlobalPackageReference Include="Bluehill.Imports" Version="1.0.8" />
+    <GlobalPackageReference Include="Bluehill.Imports" Version="1.0.9" />
   </ItemGroup>
 </Project>
