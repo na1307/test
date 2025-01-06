@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
 
-namespace Dnvm;
+namespace Ndnm;
 
 internal sealed class TypeRegistrar(IServiceCollection services) : ITypeRegistrar {
     public ITypeResolver Build() => new TypeResolver(services.BuildServiceProvider());

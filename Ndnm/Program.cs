@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
 
-namespace Dnvm;
+namespace Ndnm;
 
 internal static class Program {
     private static Task<int> Main(string[] args) {

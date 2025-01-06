@@ -4,7 +4,7 @@ using Spectre.Console.Cli;
 using System.ComponentModel;
 using System.Text.Json;
 
-namespace Dnvm;
+namespace Ndnm;
 
 internal sealed class InstallCommand(HttpClient client) : AsyncCommand<InstallCommand.Settings> {
     private static readonly Uri releaseIndexJsonUrl = new("https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/releases-index.json");

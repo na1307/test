@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Dnvm;
+namespace Ndnm;
 
 public sealed record class SdkFile {
     [JsonPropertyName("rid")]

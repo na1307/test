@@ -1,6 +1,6 @@
 <Directives xmlns="http://schemas.microsoft.com/netfx/2013/01/metadata">
   <Application>
-    <Assembly Name="dnvm" Dynamic="Required All" />
+    <Assembly Name="ndnm" Dynamic="Required All" />
     <Assembly Name="Spectre.Console.Cli" Dynamic="Required All" />
   </Application>
 </Directives>

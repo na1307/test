@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Dnvm;
+namespace Ndnm;
 
 [JsonSourceGenerationOptions]
 [JsonSerializable(typeof(SdkFile))]

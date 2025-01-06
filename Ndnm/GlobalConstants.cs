@@ -1,4 +1,4 @@
-namespace Dnvm;
+namespace Ndnm;
 
 public static class GlobalConstants {
     public const string DnvmName = "dnvm";

@@ -1,7 +1,7 @@
 using Spectre.Console.Cli;
 using System.Diagnostics;
 
-namespace Dnvm;
+namespace Ndnm;
 
 internal sealed class ListCommand : AsyncCommand {
     public override async Task<int> ExecuteAsync(CommandContext context) {

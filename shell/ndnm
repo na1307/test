@@ -1,0 +1,22 @@
+#!/usr/bin/bash
+
+echo This is another ndnm.
+
+ndnmPath=~/.ndnm
+instancesName=instances
+
+listCommand() {
+    cd $ndnmPath/$instancesName
+    installed=($(ls -d *))
+
+    for install in ${installed[@]}; do
+        echo "$install [$ndnmPath/$instancesName/$install]"
+    done
+}
+
+installCommand() {
+    dryRun=$($ndnmPath/dotnet-install.sh --channel $1 --install-dir $ndnmPath/$instancesName/$1 --quality ga --dry-run)
+    versionNumber=$(echo $dryRun | grep 'Repeatable invocation' | sed -n 's/.*--version "\([0-9.]*\)".*/\1/p')
+    $ndnmPath/dotnet-install.sh --channel $1 --install-dir $ndnmPath/$instancesName/$versionNumber --quality ga
+    echo "Installation Completed."
+}
