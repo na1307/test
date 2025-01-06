@@ -1,11 +1,11 @@
 namespace Ndnm;
 
 public static class GlobalConstants {
-    public const string DnvmName = "dnvm";
+    public const string NdnmName = "ndnm";
     public const string InstancesName = "instances";
 
-    public static readonly string DnvmPath =
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), DnvmName);
+    public static readonly string NdnmPath =
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), NdnmName);
 
-    public static readonly string InstancesPath = Path.Combine(DnvmPath, InstancesName);
+    public static readonly string InstancesPath = Path.Combine(NdnmPath, InstancesName);
 }
