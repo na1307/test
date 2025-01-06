@@ -18,7 +18,38 @@ internal sealed class InstallCommand(HttpClient client) : AsyncCommand<InstallCo
                 .Select(release => new Uri(release.GetProperty("releases.json").GetString()!)));
 
         await foreach (var channel in channels) {
-            AnsiConsole.WriteLine(channel.ToString());
+            AnsiConsole.WriteLine($"ChannelVersion: {channel.ChannelVersion}");
+            AnsiConsole.WriteLine($"LatestSdk: {channel.LatestSdk}");
+
+            foreach (var release in channel.Releases) {
+                AnsiConsole.WriteLine($"Releases.ReleaseVersion: {release.ReleaseVersion}");
+                AnsiConsole.WriteLine($"Releases.Sdk.Version: {release.Sdk.Version}");
+                AnsiConsole.WriteLine($"Releases.Sdk.DisplayVersion: {release.Sdk.DisplayVersion}");
+                AnsiConsole.WriteLine($"Releases.Sdk.RuntimeVersion: {release.Sdk.RuntimeVersion ?? "null"}");
+
+                foreach (var file in release.Sdk.Files) {
+                    AnsiConsole.WriteLine($"Releases.Sdk.Files.RuntimeIdentifier: {file.RuntimeIdentifier ?? "null"}");
+                    AnsiConsole.WriteLine($"Releases.Sdk.Files.Url: {file.Url}");
+                    AnsiConsole.WriteLine($"Releases.Sdk.Files.Sha512Hash: {file.Sha512Hash}");
+                }
+
+                foreach (var sdk in release.Sdks ?? []) {
+                    AnsiConsole.WriteLine($"Releases.Sdks.Version: {sdk.Version}");
+                    AnsiConsole.WriteLine($"Releases.Sdks.DisplayVersion: {sdk.DisplayVersion}");
+                    AnsiConsole.WriteLine($"Releases.Sdks.RuntimeVersion: {sdk.RuntimeVersion ?? "null"}");
+
+                    foreach (var file in sdk.Files) {
+                        AnsiConsole.WriteLine($"Releases.Sdks.Files.RuntimeIdentifier: {file.RuntimeIdentifier ?? "null"}");
+                        AnsiConsole.WriteLine($"Releases.Sdks.Files.Url: {file.Url}");
+                        AnsiConsole.WriteLine($"Releases.Sdks.Files.Sha512Hash: {file.Sha512Hash}");
+                    }
+                }
+
+                AnsiConsole.WriteLine();
+            }
+
+            AnsiConsole.WriteLine();
+            AnsiConsole.WriteLine();
         }
 
         return 0;
