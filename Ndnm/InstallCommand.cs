@@ -13,7 +13,7 @@ internal sealed class InstallCommand(HttpClient client) : AsyncCommand<InstallCo
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings) {
         using var indexJson = JsonDocument.Parse(await client.GetStringAsync(releasesIndexJsonUrl));
 
-        var channels = getFilesAsync(client,
+        var channels = getChannelsAsync(client,
             indexJson.RootElement.GetProperty("releases-index").EnumerateArray()
                 .Select(release => new Uri(release.GetProperty("releases.json").GetString()!)));
 
@@ -23,7 +23,7 @@ internal sealed class InstallCommand(HttpClient client) : AsyncCommand<InstallCo
 
         return 0;
 
-        static async IAsyncEnumerable<DotNetChannel> getFilesAsync(HttpClient client, IEnumerable<Uri> uris) {
+        static async IAsyncEnumerable<DotNetChannel> getChannelsAsync(HttpClient client, IEnumerable<Uri> uris) {
             foreach (var uri in uris) {
                 yield return JsonSerializer.Deserialize(await client.GetStringAsync(uri),
                     ReleasesJsonSerializerContext.Default.DotNetChannel)!;

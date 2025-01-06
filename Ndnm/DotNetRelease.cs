@@ -7,8 +7,8 @@ public sealed record class DotNetRelease {
     public required string ReleaseVersion { get; init; }
 
     [JsonPropertyName("sdk")]
-    public required SdkRelease Sdk { get; init; }
+    public required DotNetSdkRelease Sdk { get; init; }
 
     [JsonPropertyName("sdks")]
-    public SdkRelease[]? Sdks { get; init; }
+    public DotNetSdkRelease[]? Sdks { get; init; }
 }

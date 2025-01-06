@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Ndnm;
 
-public sealed record class SdkFile {
+public sealed record class DotNetSdkFile {
     [JsonPropertyName("rid")]
     public string? RuntimeIdentifier { get; init; }
 

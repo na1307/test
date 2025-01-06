@@ -4,6 +4,6 @@ namespace Ndnm;
 
 [JsonSerializable(typeof(DotNetChannel))]
 [JsonSerializable(typeof(DotNetRelease))]
-[JsonSerializable(typeof(SdkRelease))]
-[JsonSerializable(typeof(SdkFile))]
+[JsonSerializable(typeof(DotNetSdkRelease))]
+[JsonSerializable(typeof(DotNetSdkFile))]
 public sealed partial class ReleasesJsonSerializerContext : JsonSerializerContext;

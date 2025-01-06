@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Ndnm;
 
-public sealed record class SdkRelease {
+public sealed record class DotNetSdkRelease {
     [JsonPropertyName("version")]
     public required string Version { get; init; }
 
@@ -13,5 +13,5 @@ public sealed record class SdkRelease {
     public string? RuntimeVersion { get; init; }
 
     [JsonPropertyName("files")]
-    public required SdkFile[] Files { get; init; }
+    public required DotNetSdkFile[] Files { get; init; }
 }
