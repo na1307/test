@@ -7,12 +7,15 @@ using System.Text.Json;
 namespace Ndnm;
 
 internal sealed class InstallCommand(HttpClient client) : AsyncCommand<InstallCommand.Settings> {
-    private static readonly Uri releaseIndexJsonUrl = new("https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/releases-index.json");
+    private static readonly Uri releasesIndexJsonUrl =
+        new("https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/releases-index.json");
 
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings) {
-        using var indexJson = JsonDocument.Parse(await client.GetStringAsync(releaseIndexJsonUrl));
+        using var indexJson = JsonDocument.Parse(await client.GetStringAsync(releasesIndexJsonUrl));
 
-        var channels = getFilesAsync(client, indexJson.RootElement.GetProperty("releases-index").EnumerateArray().Select(release => new Uri(release.GetProperty("releases.json").GetString()!)));
+        var channels = getFilesAsync(client,
+            indexJson.RootElement.GetProperty("releases-index").EnumerateArray()
+                .Select(release => new Uri(release.GetProperty("releases.json").GetString()!)));
 
         await foreach (var channel in channels) {
             AnsiConsole.WriteLine(channel.ToString());
@@ -22,7 +25,8 @@ internal sealed class InstallCommand(HttpClient client) : AsyncCommand<InstallCo
 
         static async IAsyncEnumerable<DotNetChannel> getFilesAsync(HttpClient client, IEnumerable<Uri> uris) {
             foreach (var uri in uris) {
-                yield return JsonSerializer.Deserialize(await client.GetStringAsync(uri), DotNetChannelSerializerContext.Default.DotNetChannel)!;
+                yield return JsonSerializer.Deserialize(await client.GetStringAsync(uri),
+                    ReleasesJsonSerializerContext.Default.DotNetChannel)!;
             }
         }
     }
@@ -35,7 +39,7 @@ internal sealed class InstallCommand(HttpClient client) : AsyncCommand<InstallCo
         public override ValidationResult Validate() {
             try {
                 SemVersion.Parse(Version, SemVersionStyles.Any);
-            } catch (FormatException) when (Version[^1] == 'x') {
+            } catch (FormatException) when (Version[^1] is 'x' or 'X') {
                 return ValidationResult.Success();
             }
 
