@@ -1,21 +1,21 @@
 name: test3
 
 on:
-  status:
+  workflow_run:
+    workflows:
+      - test1
+    types:
+      - completed
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    if: github.event.state == 'success'
+    if: github.event.workflow_run.pull_requests != null && github.event.workflow_run.conclusion == 'success'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Run test
         run: |
           echo "$VALUE1"
-          echo "$VALUE2"
-          echo "$VALUE3"
         env:
-          VALUE1: ${{ github.event.repository.full_name }}
-          VALUE2: ${{ github.repository }}
-          VALUE3: ${{ github.action_repository }}
+          VALUE1: ${{ github.event.workflow_run.pull_requests.url }}
