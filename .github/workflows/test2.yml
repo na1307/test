@@ -10,6 +10,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Run sleep
-        run: sleep 1m
+        run: sleep 10s
       - name: Run test
         run: echo "test2"
