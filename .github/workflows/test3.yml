@@ -1,14 +1,12 @@
 name: test3
 
 on:
-  check_suite:
-    types:
-      - completed
+  status:
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    if: github.event.check_suite.conclusion == 'success'
+    if: github.event.state == 'success'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,6 +16,6 @@ jobs:
           echo "$VALUE2"
           echo "$VALUE3"
         env:
-          VALUE1: ${{ github.event.check_suite.pull_requests.url }}
-          VALUE2: ${{ github.event.check_suite.url }}
-          VALUE3: ${{ github.event.check_suite.id }}
+          VALUE1: ${{ github.event.repository.full_name }}
+          VALUE2: ${{ github.repository }}
+          VALUE3: ${{ github.action_repository }}
