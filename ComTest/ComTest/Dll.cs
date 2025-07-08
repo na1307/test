@@ -19,6 +19,10 @@ public static unsafe class Dll {
 
         var ptr = sbcw.GetOrCreateComInterfaceForObject(cf, CreateComInterfaceFlags.None);
 
+        if (ptr == IntPtr.Zero) {
+            return unchecked((int)0x8000FFFF); // E_UNEXPECTED
+        }
+
         try {
             var hr = Marshal.QueryInterface(ptr, in *iid, out var pInterface);
 
@@ -26,7 +30,7 @@ public static unsafe class Dll {
                 return hr;
             }
 
-            if (ptr == IntPtr.Zero) {
+            if (pInterface == IntPtr.Zero) {
                 return unchecked((int)0x8000FFFF); // E_UNEXPECTED
             }
 

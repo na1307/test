@@ -104,6 +104,10 @@ public unsafe partial class ClassFactory : IClassFactory {
 
         var ptr = sbcw.GetOrCreateComInterfaceForObject(tc, CreateComInterfaceFlags.None);
 
+        if (ptr == IntPtr.Zero) {
+            return unchecked((int)0x8000FFFF); // E_UNEXPECTED
+        }
+
         try {
             var hr = Marshal.QueryInterface(ptr, in *riid, out var pInterface);
 
@@ -111,7 +115,7 @@ public unsafe partial class ClassFactory : IClassFactory {
                 return hr;
             }
 
-            if (ptr == IntPtr.Zero) {
+            if (pInterface == IntPtr.Zero) {
                 return unchecked((int)0x8000FFFF); // E_UNEXPECTED
             }
 
