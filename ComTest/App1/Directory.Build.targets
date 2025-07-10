@@ -1,0 +1,6 @@
+<Project>
+  <Target Name="AfterPublishCustom" AfterTargets="Publish">
+    <Delete Files="..\ComTest\bin\x64\$(Configuration)\win-x64\ComTest.dll" />
+    <Copy SourceFiles="..\ComTest\bin\x64\$(Configuration)\win-x64\publish\ComTest.dll" DestinationFiles="..\ComTest\bin\x64\$(Configuration)\win-x64\ComTest.dll" />
+  </Target>
+</Project>

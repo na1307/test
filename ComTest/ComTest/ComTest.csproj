@@ -6,5 +6,14 @@
     <PublishAot>true</PublishAot>
     <Platforms>x64</Platforms>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishProfile>Local</PublishProfile>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Bluehill.NativeCom" />
+    <PackageReference Include="Bluehill.NativeCom.SourceGenerator">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>

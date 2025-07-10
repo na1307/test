@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <CentralPackageVersionOverrideEnabled>false</CentralPackageVersionOverrideEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Bluehill.NativeCom" Version="1.0.2" />
+    <PackageVersion Include="Bluehill.NativeCom.SourceGenerator" Version="1.0.2" />
+    <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.4188" />
+    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.7.250606001" />
+  </ItemGroup>
+  <ItemGroup>
+    <GlobalPackageReference Include="Bluehill.Imports" Version="1.0.17" />
+  </ItemGroup>
+</Project>
