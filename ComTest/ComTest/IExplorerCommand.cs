@@ -156,7 +156,11 @@ public sealed unsafe partial class TheCommand : IExplorerCommand {
     public void* EnumSubCommands() => throw new NotImplementedException();
 
     [DllImport("user32.dll", CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
-    private static extern int MessageBoxW(void* hwnd, [MarshalAs(UnmanagedType.LPWStr)] string? text, [MarshalAs(UnmanagedType.LPWStr)] string? caption, uint type);
+    private static extern int MessageBoxW(
+        void* hwnd,
+        [MarshalAs(UnmanagedType.LPWStr)] string? text,
+        [MarshalAs(UnmanagedType.LPWStr)] string? caption,
+        uint type);
 
     [DllImport("kernel32.dll", CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
     private static extern uint GetModuleFileNameW(void* module, char* filename, uint size);
@@ -166,5 +170,5 @@ public sealed unsafe partial class TheCommand : IExplorerCommand {
 }
 
 [GeneratedComClass]
-[ClassFactory(typeof(TheCommand))]
+[ClassFactory<TheCommand>]
 internal sealed partial class TheCommandFactory : IClassFactory;
