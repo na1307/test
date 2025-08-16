@@ -5,8 +5,8 @@
     <CentralPackageVersionOverrideEnabled>false</CentralPackageVersionOverrideEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Bluehill.NativeCom" Version="1.0.4" />
-    <PackageVersion Include="Bluehill.NativeCom.SourceGenerator" Version="1.0.4" />
+    <PackageVersion Include="Bluehill.NativeCom" Version="1.0.5" />
+    <PackageVersion Include="Bluehill.NativeCom.SourceGenerator" Version="1.0.5" />
     <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.4654" />
     <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.7.250606001" />
   </ItemGroup>
