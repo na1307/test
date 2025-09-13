@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36429.23 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NativeBridge", "NativeBridge\NativeBridge.vcxproj", "{F52EB105-45F1-4452-A636-F05FA6D995D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleHashTab", "SimpleHashTab\SimpleHashTab.csproj", "{3B71E40D-EC8A-3456-4D6C-BFF9217EDD26}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM64 = Debug|ARM64
+		Debug|x64 = Debug|x64
+		Release|ARM64 = Release|ARM64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F52EB105-45F1-4452-A636-F05FA6D995D1}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{F52EB105-45F1-4452-A636-F05FA6D995D1}.Debug|ARM64.Build.0 = Debug|ARM64
+		{F52EB105-45F1-4452-A636-F05FA6D995D1}.Debug|x64.ActiveCfg = Debug|x64
+		{F52EB105-45F1-4452-A636-F05FA6D995D1}.Debug|x64.Build.0 = Debug|x64
+		{F52EB105-45F1-4452-A636-F05FA6D995D1}.Release|ARM64.ActiveCfg = Release|ARM64
+		{F52EB105-45F1-4452-A636-F05FA6D995D1}.Release|ARM64.Build.0 = Release|ARM64
+		{F52EB105-45F1-4452-A636-F05FA6D995D1}.Release|x64.ActiveCfg = Release|x64
+		{F52EB105-45F1-4452-A636-F05FA6D995D1}.Release|x64.Build.0 = Release|x64
+		{3B71E40D-EC8A-3456-4D6C-BFF9217EDD26}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{3B71E40D-EC8A-3456-4D6C-BFF9217EDD26}.Debug|ARM64.Build.0 = Debug|ARM64
+		{3B71E40D-EC8A-3456-4D6C-BFF9217EDD26}.Debug|x64.ActiveCfg = Debug|x64
+		{3B71E40D-EC8A-3456-4D6C-BFF9217EDD26}.Debug|x64.Build.0 = Debug|x64
+		{3B71E40D-EC8A-3456-4D6C-BFF9217EDD26}.Release|ARM64.ActiveCfg = Release|ARM64
+		{3B71E40D-EC8A-3456-4D6C-BFF9217EDD26}.Release|ARM64.Build.0 = Release|ARM64
+		{3B71E40D-EC8A-3456-4D6C-BFF9217EDD26}.Release|x64.ActiveCfg = Release|x64
+		{3B71E40D-EC8A-3456-4D6C-BFF9217EDD26}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

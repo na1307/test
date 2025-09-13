@@ -1,0 +1,20 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <CentralPackageVersionOverrideEnabled>false</CentralPackageVersionOverrideEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <GlobalPackageReference Include="Bluehill.Imports" Version="1.0.20" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageVersion Include="Bluehill.Features" Version="0.12.0" />
+    <PackageVersion Include="Bluehill.NativeCom" Version="1.0.7" />
+    <PackageVersion Include="Bluehill.NativeCom.SourceGenerator" Version="1.0.7">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageVersion>
+    <PackageVersion Include="System.IO.Hashing" Version="10.0.0-rc.1.25451.107" />
+    <PackageVersion Include="WinFormsComInterop" Version="0.5.0" />
+  </ItemGroup>
+</Project>
