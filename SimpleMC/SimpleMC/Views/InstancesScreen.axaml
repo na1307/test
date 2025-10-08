@@ -1,0 +1,128 @@
+﻿<v:Screen xmlns="https://github.com/avaloniaui"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:fa="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+          xmlns:v="using:SimpleMC.Views"
+          xmlns:vm="clr-namespace:SimpleMC.ViewModels"
+          mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+          x:DataType="vm:InstancesScreenViewModel"
+          x:Class="SimpleMC.Views.InstancesScreen">
+    <Design.DataContext>
+        <vm:InstancesScreenViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="50,*">
+        <fa:CommandBar Grid.Row="0" DefaultLabelPosition="Right">
+            <fa:CommandBar.PrimaryCommands>
+                <fa:CommandBarButton IconSource="Add" Label="Add Instance" Command="{Binding AddCommand}" />
+                <fa:CommandBarButton IconSource="Play" Label="Launch" IsEnabled="{Binding IsSelected}"
+                                     Command="{Binding LaunchCommand}" />
+                <fa:CommandBarButton IconSource="Delete" Label="Delete" IsEnabled="{Binding IsSelected}"
+                                     Command="{Binding DeleteCommand}" />
+                <fa:CommandBarButton IconSource="Repair" Label="Properties" IsEnabled="{Binding IsSelected}"
+                                     Command="{Binding PropertiesCommand}" />
+            </fa:CommandBar.PrimaryCommands>
+        </fa:CommandBar>
+        <ScrollViewer Grid.Row="1">
+            <ListBox ItemsSource="{Binding Instances}" SelectedItem="{Binding SelectedInstance, Mode=TwoWay}"
+                     Background="Transparent" PointerPressed="InputElement_OnPointerPressed"
+                     DoubleTapped="InputElement_OnDoubleTapped">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Width="120" Height="120" Background="Transparent">
+                            <Image Source="avares://SimpleMC/Assets/avalonia-logo.ico" Width="64" Height="64"
+                                   HorizontalAlignment="Center" Margin="0,8,0,8" />
+                            <TextBlock Text="{Binding Name}" TextAlignment="Center" TextWrapping="Wrap" MaxWidth="110"
+                                       FontSize="13" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.Styles>
+                    <!-- ListBoxItem 템플릿 완전 커스터마이즈 -->
+                    <Style Selector="ListBoxItem">
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="Margin" Value="10" />
+                        <Setter Property="CornerRadius" Value="8" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderThickness" Value="2" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                        <Setter Property="Template">
+                            <ControlTemplate>
+                                <Border Name="Root"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="{TemplateBinding CornerRadius}"
+                                        Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter Name="PART_ContentPresenter"
+                                                      Content="{TemplateBinding Content}"
+                                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter>
+
+                        <Setter Property="ContextFlyout">
+                            <MenuFlyout>
+                                <MenuItem Header="Launch"
+                                          Command="{Binding $parent[ListBox].((vm:InstancesScreenViewModel)DataContext).LaunchCommand}">
+                                    <MenuItem.Icon>
+                                        <fa:SymbolIcon Symbol="Play" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="Delete"
+                                          Command="{Binding $parent[ListBox].((vm:InstancesScreenViewModel)DataContext).DeleteCommand}">
+                                    <MenuItem.Icon>
+                                        <fa:SymbolIcon Symbol="Delete" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="Properties"
+                                          Command="{Binding $parent[ListBox].((vm:InstancesScreenViewModel)DataContext).PropertiesCommand}">
+                                    <MenuItem.Icon>
+                                        <fa:SymbolIcon Symbol="Repair" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </MenuFlyout>
+                        </Setter>
+                    </Style>
+
+                    <!-- 포인터 올렸을 때: 희미한 테두리 -->
+                    <Style Selector="ListBoxItem:pointerover">
+                        <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
+                    </Style>
+
+                    <!-- ContentPresenter 배경 명시적 제거 -->
+                    <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Background" Value="Transparent" />
+                    </Style>
+
+                    <!-- 선택되었을 때: 선명한 테두리 -->
+                    <Style Selector="ListBoxItem:selected">
+                        <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                    </Style>
+
+                    <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Background" Value="Transparent" />
+                    </Style>
+
+                    <!-- 선택되고 포인터 올렸을 때: 더 진한 테두리 -->
+                    <Style Selector="ListBoxItem:selected:pointerover">
+                        <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorTertiaryBrush}" />
+                    </Style>
+
+                    <Style
+                        Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Background" Value="Transparent" />
+                    </Style>
+                </ListBox.Styles>
+            </ListBox>
+        </ScrollViewer>
+    </Grid>
+</v:Screen>

@@ -1,0 +1,31 @@
+﻿<v:Screen xmlns="https://github.com/avaloniaui"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:v="using:SimpleMC.Views"
+          xmlns:vm="clr-namespace:SimpleMC.ViewModels"
+          mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+          x:DataType="vm:NoInstancesScreenViewModel"
+          x:Class="SimpleMC.Views.NoInstancesScreen">
+    <Design.DataContext>
+        <vm:NoInstancesScreenViewModel />
+    </Design.DataContext>
+
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
+        <TextBlock HorizontalAlignment="Center">No instances.</TextBlock>
+        <StackPanel Orientation="Horizontal">
+            <Button Command="{Binding AddInstanceCommand}">
+                <StackPanel Orientation="Vertical">
+                    <Image Width="50" Height="50" Source="avares://SimpleMC/Assets/avalonia-logo.ico" />
+                    <TextBlock>Add Instance</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button>
+                <StackPanel Orientation="Vertical">
+                    <Image Width="50" Height="50" Source="avares://SimpleMC/Assets/avalonia-logo.ico" />
+                    <TextBlock>Import from ZIP</TextBlock>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </StackPanel>
+</v:Screen>
