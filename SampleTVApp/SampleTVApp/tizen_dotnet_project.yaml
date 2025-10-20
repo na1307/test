@@ -1,0 +1,19 @@
+# csproj file path
+csproj_file: SampleTVApp.csproj
+
+# Default profile, Tizen API version
+profile: tv-samsung
+api_version: "6.0"
+
+# Build type [Debug/ Release/ Test]
+build_type: Debug
+
+# files monitored for dirty/modified status
+files:
+  - SampleTVApp.csproj
+  - SampleTVApp_App.cs
+  - tizen-manifest.xml
+  - shared/res/SampleTVApp.png
+
+# project dependencies
+deps: []
