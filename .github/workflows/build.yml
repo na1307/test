@@ -17,4 +17,4 @@ jobs:
     container:
       image: 'archlinux:multilib-devel'
     steps:
-      - run: uname -a
+      - run: pacman --help
