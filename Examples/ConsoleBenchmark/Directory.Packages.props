@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <CentralPackageVersionOverrideEnabled>false</CentralPackageVersionOverrideEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="BenchmarkDotNet" Version="0.15.2" />
+    <PackageVersion Include="CliFx" Version="2.3.6" />
+    <PackageVersion Include="Spectre.Console.Cli" Version="0.50.0" />
+    <PackageVersion Include="System.CommandLine" Version="2.0.0-beta6.25358.103" />
+  </ItemGroup>
+  <ItemGroup>
+    <GlobalPackageReference Include="Bluehill.Imports" Version="1.0.17" />
+  </ItemGroup>
+</Project>

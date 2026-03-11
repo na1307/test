@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["DOM", "ESNext"],
+    "strict": true,
+    "sourceMap": true,
+    "module": "ESNext",
+    "outDir": "../wwwroot/scripts"
+  }
+}
