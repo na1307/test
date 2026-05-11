@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <CentralPackageVersionOverrideEnabled>true</CentralPackageVersionOverrideEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="System.CommandLine" Version="2.0.7" />
+  </ItemGroup>
+</Project>

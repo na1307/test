@@ -1,0 +1,20 @@
+project.ConfigurePluginSources(sources => {
+    sources.AddNuGetGallery();
+});
+
+project.ConfigurePlugins(plugins => {
+    plugins.AddCSharp();
+});
+
+project.ConfigureNuGetSources(sources => {
+    sources.AddNuGetGallery();
+});
+
+project.ConfigureConfigurations(configurations => {
+    configurations.AddDefaultConfigurations();
+});
+
+project.ConfigureCSharp(csharp => {
+    csharp.SetOutputType(OutputType.Exe)
+        .AddTargetFramework(TargetFramework.Net100);
+});

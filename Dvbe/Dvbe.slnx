@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="src/DotnetDvbe/DotnetDvbe.csproj" />
+  <Project Path="src/Dvbe.Cli/Dvbe.Cli.csproj" />
+  <Project Path="src/Dvbe.Core/Dvbe.Core.csproj" />
+  <Project Path="src/Dvbe.GlobalTool/Dvbe.GlobalTool.csproj" />
+  <Project Path="src/Dvbe.Plugin.Dotnet/Dvbe.Plugin.Dotnet.csproj" />
+  <Project Path="src/Dvbe.Plugin/Dvbe.Plugin.csproj" />
+</Solution>

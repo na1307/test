@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Sdk Name="Bluehill.MSBuild.Sdk" />
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <NoWarn>$(NoWarn);SA1600;SA1602;S1121</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>Dvbe.Core</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+</Project>
