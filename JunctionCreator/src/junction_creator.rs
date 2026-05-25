@@ -1,18 +1,21 @@
-use crate::DLL_REF_COUNT;
-use std::os::windows::process::CommandExt;
+use crate::{DLL_REF_COUNT, to_utf16_null_terminated};
+use std::ffi::{OsString, c_void};
+use std::os::windows::ffi::OsStrExt;
 use std::path::PathBuf;
-use std::process::Command;
-use std::ptr::null_mut;
+use std::ptr::{copy_nonoverlapping, null_mut};
 use std::str::FromStr;
 use std::sync::Mutex;
 use std::sync::atomic::Ordering;
+use windows::Wdk::Storage::FileSystem::REPARSE_DATA_BUFFER;
 use windows::Win32::Foundation::*;
 use windows::Win32::Globalization::lstrcmpiW;
-use windows::Win32::Storage::FileSystem::GetVolumeInformationW;
+use windows::Win32::Storage::FileSystem::*;
 use windows::Win32::System::Com::*;
+use windows::Win32::System::IO::DeviceIoControl;
+use windows::Win32::System::Ioctl::FSCTL_SET_REPARSE_POINT;
 use windows::Win32::System::Ole::{CF_HDROP, ReleaseStgMedium};
 use windows::Win32::System::Registry::HKEY;
-use windows::Win32::System::Threading::CREATE_NO_WINDOW;
+use windows::Win32::System::SystemServices::IO_REPARSE_TAG_MOUNT_POINT;
 use windows::Win32::UI::Shell::Common::ITEMIDLIST;
 use windows::Win32::UI::Shell::*;
 use windows::Win32::UI::WindowsAndMessaging::{HMENU, InsertMenuW, MF_BYPOSITION, MF_STRING};
@@ -20,15 +23,15 @@ use windows::core::*;
 
 #[implement(IShellExtInit, IContextMenu)]
 pub(crate) struct JunctionCreator {
-    from: Mutex<String>,
-    to: Mutex<String>,
+    from: Mutex<PathBuf>,
+    to: Mutex<PathBuf>,
 }
 
 impl JunctionCreator {
     pub(crate) fn new() -> Self {
         Self {
-            from: Mutex::new(String::new()),
-            to: Mutex::new(String::new()),
+            from: Mutex::new(PathBuf::new()),
+            to: Mutex::new(PathBuf::new()),
         }
     }
 }
@@ -41,6 +44,9 @@ impl Drop for JunctionCreator {
 
 impl IShellExtInit_Impl for JunctionCreator_Impl {
     fn Initialize(&self, pidlfolder: *const ITEMIDLIST, pdtobj: Ref<IDataObject>, _hkeyprogid: HKEY) -> Result<()> {
+        let temp_from: String;
+        let temp_to: String;
+
         // to
         unsafe {
             let mut buffer = [0u16; 260];
@@ -67,13 +73,8 @@ impl IShellExtInit_Impl for JunctionCreator_Impl {
                 return Err(E_FAIL.into());
             }
 
-            if let Ok(mut to) = self.to.lock() {
-                let len = buffer.iter().position(|&p| p == 0).unwrap_or(buffer.len());
-
-                *to = String::from_utf16(&buffer[..len])?;
-            } else {
-                return Err(E_FAIL.into());
-            }
+            let len = buffer.iter().position(|&p| p == 0).unwrap_or(buffer.len());
+            temp_to = String::from_utf16(&buffer[..len])?;
         }
 
         // from
@@ -113,22 +114,24 @@ impl IShellExtInit_Impl for JunctionCreator_Impl {
                 return Err(E_INVALIDARG.into());
             }
 
-            if let Ok(mut from) = self.from.lock() {
-                *from = String::from_utf16(&buffer[..path_length as usize])?;
-            } else {
-                return Err(E_FAIL.into());
-            }
+            temp_from = String::from_utf16(&buffer[..path_length as usize])?;
         }
 
-        if let Ok(from) = self.from.lock()
-            && let Ok(to) = self.to.lock()
-        {
-            let fromPath = PathBuf::from_str(&from).map_err(|_| E_FAIL)?;
-            let toPath = PathBuf::from_str(&to).map_err(|_| E_FAIL)?;
+        let fromPath = PathBuf::from_str(&temp_from).map_err(|_| E_FAIL)?;
+        let toPath = PathBuf::from_str(&temp_to).map_err(|_| E_FAIL)?;
 
-            if fromPath.parent().unwrap_or(&fromPath) == toPath {
-                return Err(E_INVALIDARG.into());
-            }
+        if fromPath.parent().unwrap_or(&fromPath) == toPath {
+            return Err(E_INVALIDARG.into());
+        }
+
+        if let Ok(mut from) = self.from.lock() {
+            *from = temp_from.into();
+        } else {
+            return Err(E_FAIL.into());
+        }
+
+        if let Ok(mut to) = self.to.lock() {
+            *to = temp_to.into();
         } else {
             return Err(E_FAIL.into());
         }
@@ -170,20 +173,79 @@ impl IContextMenu_Impl for JunctionCreator_Impl {
         {
             let mut to = to.clone();
 
-            let name = PathBuf::from_str(&from)
-                .map_err(|_| E_FAIL)?
-                .file_name()
-                .ok_or(E_FAIL)?
-                .to_str()
-                .ok_or(E_FAIL)?
-                .to_string();
+            to.push(from.file_name().ok_or(E_FAIL)?);
 
-            to.push_str(&name);
+            let to_vec = to_utf16_null_terminated(to.to_str().ok_or(E_FAIL)?);
 
-            Command::new("cmd")
-                .args(["/c", "mklink", "/j", &to, &from])
-                .creation_flags(CREATE_NO_WINDOW.0)
-                .spawn()?;
+            unsafe {
+                CreateDirectoryW(PCWSTR(to_vec.as_ptr()), None)?;
+
+                let handle = SafeHandle(CreateFileW(
+                    PCWSTR(to_vec.as_ptr()),
+                    GENERIC_WRITE.0,
+                    FILE_SHARE_NONE,
+                    None,
+                    OPEN_EXISTING,
+                    FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS,
+                    None,
+                )?);
+
+                let mut substitute_string = OsString::from("\\??\\");
+
+                substitute_string.push(from.as_os_str());
+
+                let mut substitute_name: Vec<u16> = substitute_string.encode_wide().collect();
+
+                substitute_name.push(0);
+
+                let mut print_name: Vec<u16> = from.as_os_str().encode_wide().collect();
+
+                print_name.push(0);
+
+                let sub_len_bytes = ((substitute_name.len() - 1) * size_of::<u16>()) as u16;
+                let print_len_bytes = ((print_name.len() - 1) * size_of::<u16>()) as u16;
+                let sub_offset = 0u16;
+                let print_offset = (substitute_name.len() * size_of::<u16>()) as u16;
+                let mount_point_header_size = 16usize;
+                let path_buffer_bytes = (substitute_name.len() + print_name.len()) * size_of::<u16>();
+                let total_buffer_size = mount_point_header_size + path_buffer_bytes;
+                let mut buffer = vec![0u8; total_buffer_size];
+                let reparse_ptr = buffer.as_mut_ptr() as *mut REPARSE_DATA_BUFFER;
+                (*reparse_ptr).ReparseTag = IO_REPARSE_TAG_MOUNT_POINT;
+                (*reparse_ptr).ReparseDataLength = (total_buffer_size - 8) as u16;
+                (*reparse_ptr).Reserved = 0;
+                let mount_point = &mut (*reparse_ptr).Anonymous.MountPointReparseBuffer;
+                mount_point.SubstituteNameOffset = sub_offset;
+                mount_point.SubstituteNameLength = sub_len_bytes;
+                mount_point.PrintNameOffset = print_offset;
+                mount_point.PrintNameLength = print_len_bytes;
+                let path_buffer_start = mount_point.PathBuffer.as_mut_ptr();
+
+                copy_nonoverlapping(
+                    substitute_name.as_ptr(),
+                    path_buffer_start.offset((sub_offset / 2) as isize),
+                    substitute_name.len(),
+                );
+
+                copy_nonoverlapping(
+                    print_name.as_ptr(),
+                    path_buffer_start.offset((print_offset / 2) as isize),
+                    print_name.len(),
+                );
+
+                let mut br = 0;
+
+                DeviceIoControl(
+                    (&handle).into(),
+                    FSCTL_SET_REPARSE_POINT,
+                    Some(buffer.as_ptr() as *const c_void),
+                    total_buffer_size as u32,
+                    None,
+                    0,
+                    Some(&mut br),
+                    None,
+                )?;
+            }
         } else {
             return Err(E_FAIL.into());
         }
@@ -203,5 +265,21 @@ impl Drop for StgMediumGuard {
         unsafe {
             ReleaseStgMedium(&mut self.0);
         }
+    }
+}
+
+struct SafeHandle(HANDLE);
+
+impl Drop for SafeHandle {
+    fn drop(&mut self) {
+        unsafe {
+            self.0.free();
+        }
+    }
+}
+
+impl From<&SafeHandle> for HANDLE {
+    fn from(value: &SafeHandle) -> Self {
+        value.0
     }
 }

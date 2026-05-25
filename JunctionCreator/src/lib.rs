@@ -34,7 +34,7 @@ extern "system" fn DllGetClassObject(rclsid: *const GUID, riid: *const GUID, ppv
         return E_POINTER;
     }
 
-    if unsafe { (*rclsid).eq(&JUNCTIONCREATOR_CLSID) } {
+    if unsafe { *rclsid }.eq(&JUNCTIONCREATOR_CLSID) {
         let instance = JunctionCreatorFactory {}.into_object();
 
         DLL_REF_COUNT.fetch_add(1, Ordering::Relaxed);
