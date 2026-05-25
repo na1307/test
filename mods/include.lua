@@ -1,27 +1,3 @@
-toolchain("clang-cl-dependencies")
-    set_kind("standalone")
-
-    set_toolset("cc", "clang-cl")
-    set_toolset("cxx", "clang-cl")
-    set_toolset("ld", "lld-link")
-    set_toolset("sh", "lld-link")
-    set_toolset("ar", "llvm-ar")
-    set_toolset("mrc", "llvm-rc")
-    set_toolset("dlltool", "llvm-dlltool")
-    set_toolset("as", "llvm-ml")
-
-    on_check(function (toolchain)
-        return import("lib.detect.find_tool")("clang-cl")
-    end)
-
-    on_load(function (toolchain)
-        toolchain:add("cxflags", "-m32", "-msse3", "--target=i686-pc-windows-msvc")
-        toolchain:add("mxflags", "-m32", "-msse3", "--target=i686-pc-windows-msvc")
-        if is_mode("release") then
-            toolchain:add("cxflags", "-flto=thin")
-        end
-    end)
-
 rule("edgemod")
     on_load(function (target)
         target:set("kind", "shared")
@@ -31,11 +7,6 @@ rule("edgemod")
             target:set("runtimes", "MT")
         end
         target:set("policy", "build.c++.modules", true)
-        target:set("toolset", "mrc", "llvm-rc")
-        target:set("toolset", "ld", "lld-link")
-        target:set("toolset", "sh", "lld-link")
-        target:set("toolset", "ar", "llvm-ar")
-        target:set("toolset", "as", "llvm-ml")
         target:add("cxflags", "-m32", "-msse3", "--target=i686-pc-windows-msvc")
     end)
 

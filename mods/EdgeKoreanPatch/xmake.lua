@@ -3,7 +3,7 @@ add_rules("mode.debug", "mode.release")
 set_defaultmode("debug")
 set_plat("windows")
 set_arch("x86")
-set_toolchains("clang-cl")
+set_toolchains("clang-cl[llvm]")
 set_languages("c17", "cxx23")
 
 if is_mode("debug") then
