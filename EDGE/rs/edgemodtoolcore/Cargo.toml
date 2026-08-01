@@ -1,0 +1,20 @@
+[package]
+name = "edgemodtoolcore"
+version = "1.0.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+byteorder.workspace = true
+indexmap = { workspace = true, features = ["serde"] }
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
+sevenz-rust.workspace = true
+skia-safe.workspace = true
+unrar.workspace = true
+zip.workspace = true
+
+[build-dependencies]
+embed-resource.workspace = true

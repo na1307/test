@@ -1,0 +1,4 @@
+LIBRARY BluehillLoader
+EXPORTS
+    XInputGetState @2
+    XInputSetState @3

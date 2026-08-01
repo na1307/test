@@ -1,0 +1,11 @@
+[package]
+name = "edgemodtool"
+version = "1.0.0"
+edition = "2024"
+
+[dependencies]
+clap = { workspace = true, features = ["derive"] }
+edgemodtoolcore = { path = "../edgemodtoolcore" }
+
+[build-dependencies]
+embed-resource.workspace = true
