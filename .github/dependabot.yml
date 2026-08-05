@@ -1,0 +1,22 @@
+version: 2
+
+multi-ecosystem-groups:
+  dotnet:
+    schedule:
+      interval: weekly
+      day: wednesday
+      time: "09:00"
+      timezone: Asia/Seoul
+
+updates:
+  - package-ecosystem: nuget
+    directory: /sj
+    patterns:
+      - '*'
+    multi-ecosystem-group: dotnet
+
+  - package-ecosystem: dotnet-sdk
+    directory: /sj
+    patterns:
+      - '*'
+    multi-ecosystem-group: dotnet
