@@ -1,6 +1,106 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
+  "description": "Enable only sj. This is for test so not set schedule",
+  "includePaths": [
+    "sj/**"
+  ],
+  "enabledManagers": [
+    "nuget"
+  ],
+  "lockFileMaintenance": {
+    "description": "Explicitly disable",
+    "enabled": false
+  },
+  "vulnerabilityAlerts": {
+    "description": "Explicitly disable",
+    "enabled": false
+  },
+  "assignees": [
+    "na1307"
+  ],
+  "reviewers": [
+    "na1307"
+  ],
+  "assignAutomerge": false,
+  "timezone": "Asia/Seoul",
+  "automerge": false,
+  "automergeType": "pr",
+  "automergeStrategy": "squash",
+  "platformAutomerge": false,
+  "packageRules": [
+    {
+      "matchManagers": [
+        "nuget"
+      ],
+      "matchDepTypes": [
+        "nuget",
+        "msbuild-sdk"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "NuGet Packages Update",
+      "automerge": true
+    },
+    {
+      "matchManagers": [
+        "nuget"
+      ],
+      "matchDepTypes": [
+        "nuget"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "matchPackageNames": [
+        "Microsoft.*",
+        "System.*"
+      ],
+      "groupName": "Microsoft NuGet Packages Major Update"
+    },
+    {
+      "matchManagers": [
+        "nuget"
+      ],
+      "matchDepTypes": [
+        "nuget"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "matchPackageNames": [
+        "Bluehill.*"
+      ],
+      "groupName": "Bluehill NuGet Packages Major Update"
+    },
+    {
+      "matchManagers": [
+        "nuget"
+      ],
+      "matchDepTypes": [
+        "dotnet-sdk"
+      ],
+      "groupName": ".NET SDK Update",
+      "automerge": false
+    },
+    {
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "automerge": false
+    },
+    {
+      "matchManagers": [
+        "nuget"
+      ],
+      "matchDepTypes": [
+        "dotnet-sdk"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": false
+    }
   ]
 }
