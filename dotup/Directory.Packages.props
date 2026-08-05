@@ -1,0 +1,15 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <CentralPackageVersionOverrideEnabled>true</CentralPackageVersionOverrideEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Bluehill.Features" Version="0.12.0" />
+    <PackageVersion Include="ConsoleAppFramework" Version="5.7.13" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.10" />
+    <PackageVersion Include="Semver" Version="3.0.0" />
+    <PackageVersion Include="Spectre.Console" Version="0.54.0" />
+    <PackageVersion Include="Spectre.Console.Analyzer" Version="1.0.0" />
+  </ItemGroup>
+</Project>

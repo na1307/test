@@ -1,0 +1,73 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  release:
+    types:
+      - published
+
+jobs:
+  build:
+    name: .NET
+    runs-on: ubuntu-latest
+    env:
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+    steps:
+      - uses: actions/checkout@v6
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+      - name: Cache NuGet
+        uses: actions/cache@v5
+        with:
+          path: ${{ github.workspace }}/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('Directory.Packages.props') }} #hash of project files
+          restore-keys: ${{ runner.os }}-nuget-
+      - name: Restore
+        run: dotnet restore
+      - name: Build (Debug)
+        run: dotnet build -c Debug --no-restore
+      - name: Test (Debug)
+        run: dotnet test --no-build --verbosity normal
+      - name: Publish (Release)
+        run: |
+          dotnet publish dotup -c Release -p:Platform=x64 -o _out
+      - name: Upload artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: Release
+          path: _out
+
+  publish:
+    name: Publish
+    if: github.event_name == 'release'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+      - name: Download Package artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: Release
+          path: _out
+      - name: Compress
+        run: |
+          cp dotup.sh _out
+          cp README.md _out
+          cp LICENSE _out
+          cd _out
+          tar -czpf ../dotup_${{ github.event.release.tag_name }}_linux-x64.tar.gz .
+          cd ..
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: '*.tar.gz'

@@ -1,0 +1,29 @@
+version: 2
+
+multi-ecosystem-groups:
+  dotnet:
+    schedule:
+      interval: weekly
+      day: wednesday
+      time: "09:00"
+      timezone: Asia/Seoul
+
+updates:
+  - package-ecosystem: nuget
+    directory: /
+    patterns:
+      - '*'
+    multi-ecosystem-group: dotnet
+
+  - package-ecosystem: dotnet-sdk
+    directory: /
+    patterns:
+      - '*'
+    multi-ecosystem-group: dotnet
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+      time: "12:00"
+      timezone: Asia/Seoul
