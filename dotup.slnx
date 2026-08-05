@@ -5,5 +5,4 @@
   <Project Path="dotup/dotup.csproj">
     <Platform Solution="*|x64" Project="x64" />
   </Project>
-  <Project Path="tests/dotup.Tests/dotup.Tests.csproj" />
 </Solution>

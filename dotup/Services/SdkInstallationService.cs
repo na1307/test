@@ -1,13 +1,12 @@
 using Dotup.Json.Registry;
 using Dotup.Json.ReleasesIndex;
 using System.Diagnostics;
-using System.IO.Abstractions;
 using System.IO.Compression;
 using System.Security.Cryptography;
 
 namespace Dotup.Services;
 
-internal sealed class SdkInstallationService(IFileSystem fileSystem, IRegistryService registryService, ITarExtractor tarExtractor)
+internal sealed class SdkInstallationService(IRegistryService registryService, ITarExtractor tarExtractor)
     : ISdkInstallationService {
     public async Task<bool> InstallSdkAsync(
         HttpClient client,
@@ -30,12 +29,12 @@ internal sealed class SdkInstallationService(IFileSystem fileSystem, IRegistrySe
                 var tempDirPath = Path.Combine(DotupPath, "temp");
 
                 // Ensure random file is clean
-                if (fileSystem.File.Exists(randomFilePath)) {
-                    fileSystem.File.Delete(randomFilePath);
+                if (File.Exists(randomFilePath)) {
+                    File.Delete(randomFilePath);
                 }
 
                 try {
-                    await using (var fs = fileSystem.FileStream.New(randomFilePath, FileMode.CreateNew, FileAccess.Write, FileShare.None, bufferSize,
+                    await using (FileStream fs = new(randomFilePath, FileMode.CreateNew, FileAccess.Write, FileShare.None, bufferSize,
                                      true))
                     await using (var response = await client.GetStreamAsync(sdkFile.Url, token)) {
                         var stopwatch = Stopwatch.StartNew();
@@ -63,7 +62,7 @@ internal sealed class SdkInstallationService(IFileSystem fileSystem, IRegistrySe
                     downloadTask.Value = totalSize;
                     byte[] computedHash;
 
-                    await using (var fs = fileSystem.FileStream.New(randomFilePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, true))
+                    await using (FileStream fs = new(randomFilePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, true))
                     await using (ReadProgressStream rps = new(fs, progress => hashTask.Value = progress)) {
                         computedHash = await SHA512.HashDataAsync(rps, token);
                     }
@@ -76,13 +75,13 @@ internal sealed class SdkInstallationService(IFileSystem fileSystem, IRegistrySe
 
                     AnsiConsole.MarkupLine("[green]Download completed successfully![/]");
 
-                    if (fileSystem.Directory.Exists(tempDirPath)) {
-                        fileSystem.Directory.Delete(tempDirPath, true);
+                    if (Directory.Exists(tempDirPath)) {
+                        Directory.Delete(tempDirPath, true);
                     }
 
-                    fileSystem.Directory.CreateDirectory(tempDirPath);
+                    Directory.CreateDirectory(tempDirPath);
 
-                    await using (var fs = fileSystem.FileStream.New(randomFilePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize,
+                    await using (FileStream fs = new(randomFilePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize,
                                      true)) {
                         var fileSize = fs.Length;
                         extractTask.MaxValue = fileSize;
@@ -106,25 +105,25 @@ internal sealed class SdkInstallationService(IFileSystem fileSystem, IRegistrySe
 
                     var sdkManifestsPath = Path.Combine(tempDirPath, SdkManifestsDirName);
 
-                    var sdkManifests = fileSystem.Directory.Exists(sdkManifestsPath)
-                        ? fileSystem.Directory.EnumerateDirectories(sdkManifestsPath).Select(d => SemVersion.Parse(Path.GetFileName(d))).ToArray()
+                    var sdkManifests = Directory.Exists(sdkManifestsPath)
+                        ? Directory.EnumerateDirectories(sdkManifestsPath).Select(d => SemVersion.Parse(Path.GetFileName(d))).ToArray()
                         : [];
 
                     var inputIsGreater = registry.CliVersion is null || SemVersionComparer.Default.Compare(sdkVersion, registry.CliVersion) > 0;
-                    var instanceDir = fileSystem.Directory.CreateDirectory(InstancesPath);
+                    var instanceDir = Directory.CreateDirectory(InstancesPath);
 
                     // Recursive move using IFileSystem
-                    foreach (var file in fileSystem.Directory.EnumerateFiles(tempDirPath, "*", SearchOption.AllDirectories)) {
+                    foreach (var file in Directory.EnumerateFiles(tempDirPath, "*", SearchOption.AllDirectories)) {
                         var dest = Path.Combine(instanceDir.FullName, Path.GetRelativePath(tempDirPath, file));
 
-                        fileSystem.Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
+                        Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
 
-                        if (inputIsGreater || !fileSystem.File.Exists(dest)) {
-                            if (fileSystem.File.Exists(dest)) {
-                                fileSystem.File.Delete(dest);
+                        if (inputIsGreater || !File.Exists(dest)) {
+                            if (File.Exists(dest)) {
+                                File.Delete(dest);
                             }
 
-                            fileSystem.File.Move(file, dest);
+                            File.Move(file, dest);
                         }
                     }
 
@@ -135,12 +134,12 @@ internal sealed class SdkInstallationService(IFileSystem fileSystem, IRegistrySe
 
                     return true;
                 } finally {
-                    if (fileSystem.Directory.Exists(tempDirPath)) {
-                        fileSystem.Directory.Delete(tempDirPath, true);
+                    if (Directory.Exists(tempDirPath)) {
+                        Directory.Delete(tempDirPath, true);
                     }
 
-                    if (fileSystem.File.Exists(randomFilePath)) {
-                        fileSystem.File.Delete(randomFilePath);
+                    if (File.Exists(randomFilePath)) {
+                        File.Delete(randomFilePath);
                     }
                 }
             });
@@ -212,8 +211,8 @@ internal sealed class SdkInstallationService(IFileSystem fileSystem, IRegistrySe
     }
 
     private void DeleteDirectoryIfExists(string path) {
-        if (fileSystem.Directory.Exists(path)) {
-            fileSystem.Directory.Delete(path, true);
+        if (Directory.Exists(path)) {
+            Directory.Delete(path, true);
         }
     }
 }

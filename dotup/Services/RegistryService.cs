@@ -1,18 +1,17 @@
 using Dotup.Json.Registry;
-using System.IO.Abstractions;
 
 namespace Dotup.Services;
 
-internal sealed class RegistryService(IFileSystem fileSystem) : IRegistryService {
+internal sealed class RegistryService : IRegistryService {
     public async Task<DotupRegistry?> GetRegistryAsync(CancellationToken token = default) {
         var registryPath = RegistryJsonPath;
 
-        if (!fileSystem.File.Exists(registryPath)) {
+        if (!File.Exists(registryPath)) {
             throw new FileNotFoundException($"Error: Registry file '{registryPath}' not found.");
         }
 
         try {
-            await using var fs = fileSystem.FileStream.New(registryPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true);
+            await using FileStream fs = new(registryPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true);
 
             var registry = await JsonSerializer.DeserializeAsync(fs, Djsc.DotupRegistry, token)
                 ?? throw new InvalidOperationException($"Error: Registry file '{registryPath}' is empty or contains invalid data.");
@@ -28,7 +27,7 @@ internal sealed class RegistryService(IFileSystem fileSystem) : IRegistryService
     }
 
     public async Task<bool> IsChannelAlreadyInstalledAsync(string channel, CancellationToken token = default) {
-        if (!fileSystem.File.Exists(RegistryJsonPath)) {
+        if (!File.Exists(RegistryJsonPath)) {
             return false;
         }
 
@@ -73,7 +72,7 @@ internal sealed class RegistryService(IFileSystem fileSystem) : IRegistryService
     }
 
     private async Task SaveRegistryAsync(DotupRegistry registry) {
-        await using var fs = fileSystem.FileStream.New(RegistryJsonPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true);
+        await using FileStream fs = new(RegistryJsonPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true);
         await using Utf8JsonWriter writer = new(fs, IndentedWriterOptions);
 
         JsonSerializer.Serialize(writer, registry, Djsc.DotupRegistry);

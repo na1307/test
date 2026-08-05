@@ -259,7 +259,6 @@ dotnet_diagnostic.ca1001.severity = warning
 
 # Do not expose generic lists
 dotnet_diagnostic.ca1002.severity = warning
-dotnet_code_quality.ca1002.api_surface = all
 
 # Use generic event handler instances
 dotnet_diagnostic.ca1003.severity = warning
@@ -1004,9 +1003,6 @@ dotnet_diagnostic.s2325.severity = none
 # Types should be defined in named namespaces
 dotnet_diagnostic.s3903.severity = none
 
-# "static" fields should be initialized inline
-dotnet_diagnostic.s3963.severity = none
-
 ### StyleCop ###
 
 ## Settings ##
@@ -1338,6 +1334,9 @@ dotnet_diagnostic.sa1208.severity = none
 # Element should begin with upper-case letter
 dotnet_diagnostic.sa1300.severity = none
 
+# FieldNamesMustNotContainUnderscore
+dotnet_diagnostic.sa1310.severity = none
+
 # Access modifier should be declared
 dotnet_diagnostic.sa1400.severity = none
 
@@ -1400,6 +1399,9 @@ dotnet_diagnostic.sa1642.severity = none
 
 # Destructor summary documentation should begin with standard text
 dotnet_diagnostic.sa1643.severity = none
+
+# FileNameMustMatchTypeName
+dotnet_diagnostic.sa1649.severity = none
 
 # Do not use placeholder elements
 dotnet_diagnostic.sa1651.severity = none
@@ -4263,7 +4265,7 @@ resharper_if_std_is_constant_evaluated_can_be_replaced_highlighting = suggestion
 resharper_ignored_directive_highlighting = warning
 resharper_inactive_preprocessor_branch_highlighting = warning
 resharper_inconsistently_synchronized_field_highlighting = warning
-resharper_inconsistent_naming_highlighting = warning
+resharper_inconsistent_naming_highlighting = none
 resharper_inconsistent_order_of_locks_highlighting = warning
 resharper_incorrect_blank_lines_near_braces_highlighting = none
 resharper_indexing_by_invalid_range_highlighting = warning
@@ -5080,7 +5082,7 @@ resharper_xaml_redundant_freeze_attribute_highlighting = warning
 resharper_xaml_redundant_grid_definitions_highlighting = warning
 resharper_xaml_redundant_grid_span_highlighting = warning
 resharper_xaml_redundant_modifiers_attribute_highlighting = warning
-resharper_xaml_redundant_namespace_alias_highlighting = warning
+resharper_xaml_redundant_namespace_alias_highlighting = none
 resharper_xaml_redundant_name_attribute_highlighting = warning
 resharper_xaml_redundant_property_type_qualifier_highlighting = warning
 resharper_xaml_redundant_resource_highlighting = warning

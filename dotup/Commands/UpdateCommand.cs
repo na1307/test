@@ -11,7 +11,7 @@ internal sealed class UpdateCommand {
     /// <summary>
     /// Update .NET SDK channels
     /// </summary>
-    /// <param name="factory">Factory</param>
+    /// <param name="client">Client</param>
     /// <param name="registryService">Service</param>
     /// <param name="installationService">Service</param>
     /// <param name="channel">
@@ -30,7 +30,7 @@ internal sealed class UpdateCommand {
     [SuppressMessage("Performance", "CA1822:멤버를 static으로 표시하세요.", Justification = "False positive")]
     [SuppressMessage("Roslynator", "RCS1052:Declare each attribute separately", Justification = "Parameter")]
     public async Task<int> Update(
-        [FromServices] IHttpClientFactory factory,
+        [FromServices] HttpClient client,
         [FromServices] IRegistryService registryService,
         [FromServices] ISdkInstallationService installationService,
         [Argument, DotnetVersion(false)] string? channel = null,
@@ -48,8 +48,6 @@ internal sealed class UpdateCommand {
                 return ExitError([$"Error: The requested channel {channel} is not installed"]);
             }
         }
-
-        using var client = factory.CreateClient();
 
         AnsiConsole.Markup("[yellow]Fetching release information...[/]");
 

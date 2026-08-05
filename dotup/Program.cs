@@ -1,6 +1,5 @@
 using Dotup.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System.IO.Abstractions;
 
 namespace Dotup;
 
@@ -55,8 +54,7 @@ internal static class Program {
             }
 
             await ConsoleApp.Create().ConfigureServices(static services => {
-                services.AddHttpClient();
-                services.AddSingleton<IFileSystem, FileSystem>();
+                services.AddSingleton<HttpClient>();
                 services.AddSingleton<ITarExtractor, TarExtractor>();
                 services.AddSingleton<IRegistryService, RegistryService>();
                 services.AddSingleton<ISdkInstallationService, SdkInstallationService>();

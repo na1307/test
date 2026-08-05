@@ -12,6 +12,8 @@
 *.vbproj.user text eol=crlf
 *.c text eol=crlf
 *.cpp text eol=crlf
+*.cppm text eol=crlf
+*.ixx text eol=crlf
 *.h text eol=crlf
 *.hpp text eol=crlf
 *.rc text eol=crlf
