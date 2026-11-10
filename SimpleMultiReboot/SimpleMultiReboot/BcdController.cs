@@ -6,7 +6,6 @@ using System.Collections.ObjectModel;
 namespace SimpleMultiReboot;
 
 internal sealed class BcdController : IDisposable {
-    private readonly DComSessionOptions dcom;
     private readonly CimSession cimSession;
     private readonly CimInstance bcdStore;
     private readonly List<BootEntry> entries;
@@ -24,8 +23,7 @@ internal sealed class BcdController : IDisposable {
 #pragma warning disable IDE0028, IDE0306
         Entries = new(entries);
 #pragma warning restore IDE0028, IDE0306
-        dcom = new();
-        cimSession = CimSession.Create("localhost", dcom);
+        cimSession = CimSession.Create(null);
         using CimMethodParametersCollection osp = [CimMethodParameter.Create("File", string.Empty, CimType.String, CimFlags.None)];
         var result = cimSession.InvokeMethod("root/WMI", "BcdStore", "OpenStore", osp);
 
@@ -51,40 +49,58 @@ internal sealed class BcdController : IDisposable {
             throw new ArgumentException("Entry not found.");
         }
 
-#pragma warning disable CA2208, S3928
-        using CimMethodParametersCollection oop = [
-            CimMethodParameter.Create("Id", entry.Type switch {
-                EntryType.FirmwareApplication => "{a5a30fa2-3d06-4e9f-b5f4-a01df9d1fcba}",
-                EntryType.WindowsBootLoader => "{9dea862c-5cdd-4e70-acc1-f32b344d4795}",
-                _ => throw new ArgumentOutOfRangeException()
-            }, CimType.String, CimFlags.None)
+        using CimMethodParametersCollection oop1 = [
+            CimMethodParameter.Create("Id", "{a5a30fa2-3d06-4e9f-b5f4-a01df9d1fcba}", CimType.String, CimFlags.None)
         ];
-#pragma warning restore CA2208, S3928
 
-        var result = cimSession.InvokeMethod(bcdStore, "OpenObject", oop);
+        var result = cimSession.InvokeMethod(bcdStore, "OpenObject", oop1);
 
         if (!(bool)result.ReturnValue.Value) {
             throw new("OpenObject failed.");
         }
 
-        var managerObject = (CimInstance)result.OutParameters["Object"].Value;
+        var fwbootmgr = (CimInstance)result.OutParameters["Object"].Value;
 
-        using CimMethodParametersCollection solep = [
+        using CimMethodParametersCollection solep1 = [
             CimMethodParameter.Create("Type", BcdElementTypes.BootSequence, CimType.UInt32, CimFlags.None),
-            CimMethodParameter.Create("Ids", (string[])[entry.Identifier], CimType.StringArray, CimFlags.None)
+            CimMethodParameter.Create("Ids", (string[])[entry.Type == EntryType.FirmwareApplication ? entry.Identifier : "{9dea862c-5cdd-4e70-acc1-f32b344d4795}"], CimType.StringArray, CimFlags.None)
         ];
 
-        result = cimSession.InvokeMethod(managerObject, "SetObjectListElement", solep);
+        result = cimSession.InvokeMethod(fwbootmgr, "SetObjectListElement", solep1);
 
         if (!(bool)result.ReturnValue.Value) {
             throw new("SetObjectListElement failed.");
+        }
+
+        if (entry.Type == EntryType.WindowsBootLoader) {
+            using CimMethodParametersCollection oop2 = [
+                CimMethodParameter.Create("Id", "{9dea862c-5cdd-4e70-acc1-f32b344d4795}", CimType.String, CimFlags.None)
+            ];
+
+            result = cimSession.InvokeMethod(bcdStore, "OpenObject", oop2);
+
+            if (!(bool)result.ReturnValue.Value) {
+                throw new("OpenObject failed.");
+            }
+
+            var bootmgr = (CimInstance)result.OutParameters["Object"].Value;
+
+            using CimMethodParametersCollection solep2 = [
+                CimMethodParameter.Create("Type", BcdElementTypes.BootSequence, CimType.UInt32, CimFlags.None),
+                CimMethodParameter.Create("Ids", (string[])[entry.Identifier], CimType.StringArray, CimFlags.None)
+            ];
+
+            result = cimSession.InvokeMethod(bootmgr, "SetObjectListElement", solep2);
+
+            if (!(bool)result.ReturnValue.Value) {
+                throw new("SetObjectListElement failed.");
+            }
         }
     }
 
     public void Dispose() {
         bcdStore.Dispose();
         cimSession.Dispose();
-        dcom.Dispose();
     }
 
     private void AddEntries(EntryType type) {
