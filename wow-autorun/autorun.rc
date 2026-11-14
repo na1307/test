@@ -1,0 +1,36 @@
+1 ICON "autorun.ico"
+
+#define AUTORUN_VERSION 1,0,0,0
+#define AUTORUN_VERSION_TEXT "1.0.0\0"
+#define AUTORUN_DESCRIPTION "Bluehill Windows NT 5.x Multiboot AIO CD Autorun\0"
+
+LANGUAGE 9, 1
+
+1 VERSIONINFO
+FILEVERSION AUTORUN_VERSION
+PRODUCTVERSION AUTORUN_VERSION
+FILEFLAGSMASK 0x3f
+FILEFLAGS 0
+FILEOS 0x00000004 // VOS__WINDOWS32
+FILETYPE 0x00000001 // VFT_APP
+FILESUBTYPE 0
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "CompanyName", "Bluehill Inc.\0"
+            VALUE "FileDescription", AUTORUN_DESCRIPTION
+            VALUE "FileVersion", AUTORUN_VERSION_TEXT
+            VALUE "InternalName", "autorun\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 Bluehill Inc. All rights reserved."
+            VALUE "OriginalFilename", "autorun.exe\0"
+            VALUE "ProductName", AUTORUN_DESCRIPTION
+            VALUE "ProductVersion", AUTORUN_VERSION_TEXT
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1252
+    END
+END

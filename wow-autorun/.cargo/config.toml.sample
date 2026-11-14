@@ -1,0 +1,19 @@
+[build]
+target = "i586-rust9x-windows-msvc"
+
+[target.'cfg(all(target_env = "msvc"))']
+linker = "rust-lld"
+
+[target.'cfg(all(target_family = "rust9x", target_env = "msvc"))']
+rustflags = [
+  '-Clink-arg=/SUBSYSTEM:CONSOLE,4.0',
+  '-Clink-arg=/OSVERSION:3.51',
+  '-Clink-arg=/STACK:131072',
+  '-Ctarget-feature=+crt-static',
+  # MSVC path goes here
+  # '-Clink-arg=/LIBPATH:C:\\Program Files (x86)\\Microsoft Visual Studio .NET 2003\\Vc7\\lib',
+  '-Clink-arg=/DEBUG:NONE',
+  '-Clink-arg=/FIXED',
+  '-Clink-arg=/LARGEADDRESSAWARE:NO',
+  '-Clink-arg=/NXCOMPAT:NO'
+]
